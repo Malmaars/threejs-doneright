@@ -102,6 +102,7 @@ const renderer = new THREE.WebGLRenderer({
     alpha: false
 })
 renderer.setSize(sizes.width, sizes.height)
+//if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
