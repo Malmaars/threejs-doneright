@@ -1,0 +1,9 @@
+body
+{
+    position: relative;
+    overflow: hidden !important;
+    overflow-y: hidden;
+    margin: 0;
+    height: 100%;
+    background-color: black;
+}
