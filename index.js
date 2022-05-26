@@ -165,8 +165,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
      else
      {
 
-        targetX *= 0.9;
-        targetY *= 0.9;
+        targetX *= 0.2;
+        targetY *= 0.2;
         sphere.rotateOnWorldAxis(new THREE.Vector3(0,1,0), targetX);
         sphere.rotateOnWorldAxis(new THREE.Vector3(1,0,0), targetY);
      }
