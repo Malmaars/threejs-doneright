@@ -130,7 +130,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  
  document.addEventListener('mousedown', onDocumentMouseDown);
  document.addEventListener('mouseup', onDocumentMouseUp);
- document.addEventListener('touchstart', onDocumentTouchStart);
+ document.addEventListener('touchmove', onDocumentTouchMove);
  let mouseOffsetX = 0;
  let mouseOffsetY = 0;
  
@@ -145,7 +145,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
      sphereOffset = sphere.rotation;
  }
 
- function onDocumentTouchStart(event){
+ function onDocumentTouchMove(event){
     mouseX = event.touches[0].clientX - windowX;
     mouseY = event.touches[0].clientY - windowY;
  }
