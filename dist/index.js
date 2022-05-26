@@ -109,43 +109,61 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 
-document.addEventListener('mousemove', onDocumentMouseMove)
+ document.addEventListener('mousemove', onDocumentMouseMove)
 
-let mouseX = 0
-let mouseY = 0
-let targetX = 0
-let targetY = 0
+ let mouseX = 0
+ let mouseY = 0
+ let targetX = 0
+ let targetY = 0
+ 
+ const windowX = window.innerWidth / 2;
+ const windowY = window.innerHeight / 2;
+ 
+ function onDocumentMouseMove(event){
+     mouseX = (event.clientX - windowX);
+     mouseY = (event.clientY - windowY);
+ }
+ 
+ document.addEventListener('mousedown', onDocumentMouseDown);
+ document.addEventListener('mouseup', onDocumentMouseUp);
+ 
+ let mouseOffsetX = 0;
+ let mouseOffsetY = 0;
+ 
+ let sphereOffset = new THREE.Vector3(0,0,0)
+ 
+ let holdingMouse = false;
+ 
+ function onDocumentMouseDown(event){
+     holdingMouse = true;
+     mouseOffsetX = mouseX;
+     mouseOffsetY = mouseY;
+     sphereOffset = sphere.rotation;
+ }
+ 
+ function onDocumentMouseUp(event){
+     holdingMouse = false;
+ }
+ 
+ function RotateSphere()
+ {  
+     if(holdingMouse == true)
+     {
+        //  targetX = (mouseX - mouseOffsetX) * .001
+        //  targetY = (mouseY - mouseOffsetY) * .001
+ 
+         targetX = (mouseX - mouseOffsetX) * 0.00001;
+         targetY = (mouseY - mouseOffsetY) * 0.00002;
 
-const windowX = window.innerWidth / 2;
-const windowY = window.innerHeight / 2;
+         sphere.rotateOnWorldAxis(new THREE.Vector3(0,1,0), targetX);
+         sphere.rotateOnWorldAxis(new THREE.Vector3(1,0,0), targetY);
+         
+        //  sphere.rotation.y = sphereOffsetY + (targetX) * 2;
+        //  sphere.rotation.x = sphereOffsetX + (targetY);
+        //  sphere.rotation.z = sphereOffsetX + (targetY);
+     }
+ }
 
-function onDocumentMouseMove(event){
-    mouseX = (event.clientX - windowX);
-    mouseY = (event.clientY - windowY);
-}
-
-document.addEventListener('mousedown', onDocumentMouseDown);
-document.addEventListener('mouseup', onDocumentMouseUp);
-
-let mouseOffsetX = 0;
-let mouseOffsetY = 0;
-
-let sphereOffsetX = 0;
-let sphereOffsetY = 0;
-
-let holdingMouse = false;
-
-function onDocumentMouseDown(event){
-    holdingMouse = true;
-    mouseOffsetX = mouseX;
-    mouseOffsetY = mouseY;
-    sphereOffsetX = sphere.rotation.x;
-    sphereOffsetY = sphere.rotation.y;
-}
-
-function onDocumentMouseUp(event){
-    holdingMouse = false;
-}
 
 const clock = new THREE.Clock()
 
@@ -154,19 +172,10 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-
-    if(holdingMouse == true)
-    {
-        targetX = (mouseX - mouseOffsetX) * .001
-        targetY = (mouseY - mouseOffsetY) * .001
-        
-        sphere.rotation.y = sphereOffsetY + (targetX) * 2;
-        sphere.rotation.x = sphereOffsetX + (targetY);
-        sphere.rotation.z = sphereOffsetX + (targetY);
-    }
     // Update Orbital Controls
     // controls.update()
 
+    RotateSphere();
     // Render
     renderer.render(scene, camera)
 
