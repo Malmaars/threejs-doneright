@@ -162,6 +162,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         //  sphere.rotation.x = sphereOffsetX + (targetY);
         //  sphere.rotation.z = sphereOffsetX + (targetY);
      }
+     else
+     {
+
+        targetX *= 0.992;
+        targetY *= 0.992;
+        sphere.rotateOnWorldAxis(new THREE.Vector3(0,1,0), targetX);
+        sphere.rotateOnWorldAxis(new THREE.Vector3(1,0,0), targetY);
+     }
+
  }
 
 
