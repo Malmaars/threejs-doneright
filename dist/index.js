@@ -1,9 +1,10 @@
 import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js'
+import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
 
 //loading
 const textureLoader = new THREE.TextureLoader()
 
-const normalTexture = textureLoader.load('/textures/SmallBricks.jpg')
+//const normalTexture = textureLoader.load('/textures/SmallBricks.jpg')
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -26,6 +27,18 @@ material.color = new THREE.Color(0xffffff)
 // Mesh
 const sphere = new THREE.Mesh(geometry,material)
 scene.add(sphere)
+
+const loader = new GLTFLoader();
+
+loader.load( 'resources/SimpleBoat.gltf', function ( gltf ) {
+
+scene.add( gltf.scene );
+gltf.scene.scale.set(0.1,0.1,0.1);
+}, undefined, function ( error ) {
+
+console.error( error );
+
+}    );
 
 // Lights
 
@@ -130,7 +143,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  
  document.addEventListener('mousedown', onDocumentMouseDown);
  document.addEventListener('mouseup', onDocumentMouseUp);
- document.addEventListener('touchmove', onDocumentTouchMove);
  let mouseOffsetX = 0;
  let mouseOffsetY = 0;
  
@@ -143,11 +155,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
      mouseOffsetX = mouseX;
      mouseOffsetY = mouseY;
      sphereOffset = sphere.rotation;
- }
-
- function onDocumentTouchMove(event){
-    mouseX = event.touches[0].clientX - windowX;
-    mouseY = event.touches[0].clientY - windowY;
  }
  
  function onDocumentMouseUp(event){
