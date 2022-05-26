@@ -44,14 +44,18 @@ pointLight2.position.set(-2.25, 1.2,4.64)
 pointLight2.intensity = 2
 scene.add(pointLight2)
 
+pointLight2.parent = sphere;
+
 //const pointLightHelper = new THREE.PointLightHelper(pointLight2, 0.1)
 //scene.add(pointLightHelper)
 
 //light 3
-const pointLight3 = new THREE.PointLight(0x52166e, 0.1)
+const pointLight3 = new THREE.PointLight(0xee3835, 0.1)
 pointLight3.position.set(1.13,-2.37,-6)
 pointLight3.intensity = 1.6
 scene.add(pointLight3)
+
+pointLight3.parent = sphere;
 
 //const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, 0.1)
 //scene.add(pointLightHelper3)
@@ -165,8 +169,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
      else
      {
 
-        targetX *= 0.2;
-        targetY *= 0.2;
+        targetX *= 0.992;
+        targetY *= 0.992;
         sphere.rotateOnWorldAxis(new THREE.Vector3(0,1,0), targetX);
         sphere.rotateOnWorldAxis(new THREE.Vector3(1,0,0), targetY);
      }
