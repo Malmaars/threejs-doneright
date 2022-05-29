@@ -1,4 +1,3 @@
-
 //loading
 const textureLoader = new THREE.TextureLoader()
 
@@ -12,16 +11,7 @@ const scene = new THREE.Scene()
 var boat = new Boat(scene);
 
 // Objects
-const geometry = new THREE.SphereGeometry(1, 32, 16);
-
-// Materials
-
-const material = new THREE.MeshStandardMaterial()
-material.metalness = 0.2
-material.roughness = 0.6
-material.wireframe = true
-//material.normalMap = normalTexture
-material.color = new THREE.Color(0xffffff)
+const geometry = new THREE.BoxGeometry(1, 32, 16);
 
 // Lights
 
@@ -31,7 +21,7 @@ light.intensity = 2;
 scene.add(light);
 
 const pointLight2 = new THREE.PointLight(0x4176d9, 0.1)
-pointLight2.position.set(-2.25, 1.2,4.64)
+pointLight2.position.set(-2.25, 1.2, 4.64)
 pointLight2.intensity = 2
 scene.add(pointLight2)
 
@@ -63,11 +53,19 @@ window.addEventListener('resize', () => {
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 0
-camera.position.y = 0
-camera.position.z = 2
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.position.x = 0;
+camera.position.y = 40;
+camera.position.z = -40;
+camera.rotation.x = 45;
+camera.rotation.y = Math.PI;
 scene.add(camera)
+
+function UpdateCameraPos()
+{
+    camera.position.x = boat.model.position.x;
+
+}
 
 // Controls
 // const controls = new OrbitControls(camera, canvas)
@@ -84,8 +82,7 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-function SetImportDetail(model)
-{
+function SetImportDetail(model) {
     model.traverse(function (child) {
 
         if (child instanceof THREE.Mesh) {
@@ -102,14 +99,54 @@ function SetImportDetail(model)
  * Animate
  */
 
+var moveSpeed = 0.3;
+var rotSpeed = 0.02;
+
+var posOffset = 0;
+var rotOffset = 0;
+
+document.addEventListener("keydown", onDocumentKeyDown, false);
+function onDocumentKeyDown(event) {
+    var keyCode = event.which;
+
+    if (keyCode == 87 || keyCode == 38) {
+        posOffset = moveSpeed;
+    }
+    if (keyCode == 83 || keyCode == 40) {
+        posOffset = -moveSpeed;
+    }
+
+    if (keyCode == 65 || keyCode == 37) {
+        rotOffset = rotSpeed;
+    }
+
+    if (keyCode == 68 || keyCode == 39) {
+        rotOffset = -rotSpeed;
+    }
+};
+
+document.addEventListener("keyup", onDocumentKeyUp, false);
+function onDocumentKeyUp(event) {
+    var keyCode = event.which;
+
+    if (keyCode == 87 || keyCode == 83 || keyCode == 38 || keyCode == 40) {
+        posOffset = 0;
+    }
+    if (keyCode == 68 || keyCode == 39 || keyCode == 65 || keyCode == 37) {
+        rotOffset = 0;
+    }
+}
 
 const clock = new THREE.Clock()
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
-    boat.Update();
     // Update objects
+
+    boat.Update(posOffset, rotOffset);
+    boat.UpdateCameraPos(camera);
+
     // Update Orbital Controls
     // controls.update()
 
