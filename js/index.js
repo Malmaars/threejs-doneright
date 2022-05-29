@@ -9,6 +9,7 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 var boat = new Boat(scene);
+var sea = new Sea(scene);
 
 // Objects
 const geometry = new THREE.BoxGeometry(1, 32, 16);
@@ -16,14 +17,19 @@ const geometry = new THREE.BoxGeometry(1, 32, 16);
 // Lights
 
 //global light
-const light = new THREE.AmbientLight(0x404040); // soft white light
-light.intensity = 2;
-scene.add(light);
+const dirLight1 = new THREE.DirectionalLight(0x404040, 1); // soft white light
+dirLight1.intensity = 1;
+dirLight1.position.set(0,0,-1);
+scene.add(dirLight1);
 
-const pointLight2 = new THREE.PointLight(0x4176d9, 0.1)
-pointLight2.position.set(-2.25, 1.2, 4.64)
-pointLight2.intensity = 2
-scene.add(pointLight2)
+const dirLight2 = new THREE.DirectionalLight(0x404040, 1); // soft white light
+dirLight2.intensity = 1;
+dirLight2.position.set(0,0.8,-0.6);
+scene.add(dirLight2);
+
+const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+ambientLight.intensity = 1;
+scene.add(ambientLight);
 
 
 
@@ -54,11 +60,9 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.x = 0;
-camera.position.y = 40;
-camera.position.z = -40;
-camera.rotation.x = 45;
+camera.rotation.x = 50 * Math.PI/180;
 camera.rotation.y = Math.PI;
+camera.focus = 20;
 scene.add(camera)
 
 function UpdateCameraPos()
@@ -99,7 +103,7 @@ function SetImportDetail(model) {
  * Animate
  */
 
-var moveSpeed = 0.3;
+var moveSpeed = 0.03;
 var rotSpeed = 0.02;
 
 var posOffset = 0;
