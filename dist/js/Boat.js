@@ -8,6 +8,7 @@ function Boat(scene) {
     modelLoader.load
         ("resources/SimpleBoat.obj", (function (obj) {
             this.model = obj;
+            this.model.scale.set(0.1,0.1,0.1);
             //this.model.scale.set(0.1,0.1,0.1);
             this.model.traverse(function (child) {
                 if (child.isMesh) {
@@ -38,8 +39,8 @@ function Boat(scene) {
     this.UpdateCameraPos = function (camera) {
         if (this.model) {
             camera.position.x = this.model.position.x;
-            camera.position.y = this.model.position.y + 40;
-            camera.position.z = this.model.position.z - 40;
+            camera.position.y = this.model.position.y + 3;
+            camera.position.z = this.model.position.z - 3;
         }
     }
 }
