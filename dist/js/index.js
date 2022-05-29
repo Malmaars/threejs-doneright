@@ -1,5 +1,3 @@
-import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js'
-import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
 
 //loading
 const textureLoader = new THREE.TextureLoader()
@@ -11,9 +9,10 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+var boat = new Boat(scene);
 
 // Objects
-const geometry = new THREE.SphereGeometry( 1, 32, 16 );
+const geometry = new THREE.SphereGeometry(1, 32, 16);
 
 // Materials
 
@@ -24,40 +23,18 @@ material.wireframe = true
 //material.normalMap = normalTexture
 material.color = new THREE.Color(0xffffff)
 
-const loader = new GLTFLoader();
-
-loader.load( 'resources/SimpleBoat.gltf', function ( gltf ) {
-
-    var boat;
-    boat = gltf.scene;
-    boat.scale.set(0.1,0.1,0.1);
-
-    boat.traverse( function( child ) {
-
-        if ( child instanceof THREE.Mesh ) {
-    
-            child.material.metalness = 0;
-            // access other properties of material
-    
-        }
-    
-    } );
-
-    scene.add( boat );
-}, undefined, function ( error ) {
-
-
-    
-console.error( error );
-
-}    );
-
 // Lights
 
 //global light
-const light = new THREE.AmbientLight( 0x404040 ); // soft white light
-light.intensity = 4;
-scene.add( light );
+const light = new THREE.AmbientLight(0x404040); // soft white light
+light.intensity = 2;
+scene.add(light);
+
+const pointLight2 = new THREE.PointLight(0x4176d9, 0.1)
+pointLight2.position.set(-2.25, 1.2,4.64)
+pointLight2.intensity = 2
+scene.add(pointLight2)
+
 
 
 /**
@@ -68,8 +45,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -108,6 +84,20 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+function SetImportDetail(model)
+{
+    model.traverse(function (child) {
+
+        if (child instanceof THREE.Mesh) {
+
+            // access other properties of material
+            child.material.metalness = 0;
+
+        }
+
+    });
+}
+
 /**
  * Animate
  */
@@ -115,10 +105,10 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
+    boat.Update();
     // Update objects
     // Update Orbital Controls
     // controls.update()
@@ -131,3 +121,5 @@ const tick = () =>
 }
 
 tick()
+
+
