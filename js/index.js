@@ -103,7 +103,7 @@ function SetImportDetail(model) {
  * Animate
  */
 
-var moveSpeed = 0.03;
+var moveSpeed = 0.0003;
 var rotSpeed = 0.02;
 
 var posOffset = 0;
