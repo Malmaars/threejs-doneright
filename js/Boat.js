@@ -27,15 +27,15 @@ function Boat(scene, loadingManager) {
         }
     );
 
-    var modelLoader = new THREE.OBJLoader(loadingManager)
+    var modelLoader = new THREE.FBXLoader(loadingManager)
 
     this.model;
 
     //load in the boat, from reference in the resource folder.
     //I use an objloader instead of the "recommended" gtlf loader, because the gltfloader didn't work well.
     modelLoader.load
-        ("resources/models/FisherBoat.obj", (function (obj) {
-            this.model = obj;
+        ("resources/models/BoatAnimated.fbx", (function (object) {
+            this.model = object;
             this.model.traverse(function (child) {
                 if (child.isMesh) {
                     boatMaterial.metalness = 0;
