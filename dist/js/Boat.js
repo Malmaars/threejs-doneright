@@ -1,7 +1,7 @@
 //The script for the boat
-function Boat(scene) {
+function Boat(scene, loadingManager) {
 
-    const texLoader = new THREE.TextureLoader();
+    const texLoader = new THREE.TextureLoader(loadingManager);
 
     var boatMaterial;
 
@@ -27,7 +27,7 @@ function Boat(scene) {
         }
     );
 
-    var modelLoader = new THREE.OBJLoader()
+    var modelLoader = new THREE.OBJLoader(loadingManager)
 
     this.model;
 
@@ -71,8 +71,6 @@ function Boat(scene) {
                 velocity.setZ(velocity.z + moveDirection.z * -positionOffset);
                 velocity.setX(velocity.x + moveDirection.x * -positionOffset);
             }
-
-            console.log(velocity);
 
             //clamp the length to control the speed.
             //We don't do a usual clamp, because that would result eventually in moving only in degrees of 90.
