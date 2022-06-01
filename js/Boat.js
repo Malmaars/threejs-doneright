@@ -8,7 +8,7 @@ function Boat(scene, loadingManager) {
     // load a resource
     texLoader.load(
         // resource URL
-        'resources/textures/BoatTextures/lambert1_Base_color.png',
+        "resources/textures/seaTextureTest.jpg",
 
         // onLoad callback
         function (texture) {
