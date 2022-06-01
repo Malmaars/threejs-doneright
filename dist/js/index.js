@@ -16,22 +16,22 @@ const geometry = new THREE.BoxGeometry(1, 32, 16);
 
 // Lights
 
-//global light
+//direction light 1
 const dirLight1 = new THREE.DirectionalLight(0x404040, 1); // soft white light
-dirLight1.intensity = 1;
+dirLight1.intensity = 0.5;
 dirLight1.position.set(0,0,-1);
 scene.add(dirLight1);
 
-const dirLight2 = new THREE.DirectionalLight(0x404040, 1); // soft white light
-dirLight2.intensity = 1;
-dirLight2.position.set(0,0.8,-0.6);
-scene.add(dirLight2);
+// //direction light 2
+// const dirLight2 = new THREE.DirectionalLight(0x404040, 1); // soft white light
+// dirLight2.intensity = 3;
+// dirLight2.position.set(0,0.8,-0.6);
+// scene.add(dirLight2);
 
+//ambient light 1
 const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
-ambientLight.intensity = 1;
+ambientLight.intensity = 3;
 scene.add(ambientLight);
-
-
 
 /**
  * Sizes
@@ -103,12 +103,14 @@ function SetImportDetail(model) {
  * Animate
  */
 
+//variables to move the player
 var moveSpeed = 0.0003;
 var rotSpeed = 0.02;
 
 var posOffset = 0;
 var rotOffset = 0;
 
+//get key input
 document.addEventListener("keydown", onDocumentKeyDown, false);
 function onDocumentKeyDown(event) {
     var keyCode = event.which;
@@ -129,6 +131,8 @@ function onDocumentKeyDown(event) {
     }
 };
 
+//input to check wether the player lets go of certain keys to let them stop moving
+//I might have to change this to detect stopping movement better
 document.addEventListener("keyup", onDocumentKeyUp, false);
 function onDocumentKeyUp(event) {
     var keyCode = event.which;
@@ -143,6 +147,7 @@ function onDocumentKeyUp(event) {
 
 const clock = new THREE.Clock()
 
+//this updates frames.
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
