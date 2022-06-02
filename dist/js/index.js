@@ -32,8 +32,6 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
-var boat = new Boat(scene, loadingManager);
-var sea = new Sea(scene);
 
 // Objects
 const geometry = new THREE.BoxGeometry(1, 32, 16);
@@ -110,18 +108,8 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-function SetImportDetail(model) {
-    model.traverse(function (child) {
-
-        if (child instanceof THREE.Mesh) {
-
-            // access other properties of material
-            child.material.metalness = 0;
-
-        }
-
-    });
-}
+var boat = new Boat(scene, loadingManager);
+var sea = new Sea(scene);
 
 /**
  * Animate
@@ -178,7 +166,9 @@ const tick = () => {
     // Update objects
 
     boat.Update(posOffset, rotOffset);
+
     boat.UpdateCameraPos(camera);
+    boat.animate(clock);
 
     // Update Orbital Controls
     // controls.update()
