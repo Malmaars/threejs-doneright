@@ -1,3 +1,5 @@
+const { Vector2 } = require("three");
+
 //The script for the boat
 function Boat(scene, loadingManager) {
 
@@ -27,6 +29,7 @@ function Boat(scene, loadingManager) {
         }
     );
 
+    var physicsBody;
     const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
     var mixer;
@@ -36,7 +39,6 @@ function Boat(scene, loadingManager) {
         ('resources/models/BoatAnimated.fbx', (function (object) {
 
             this.model = object;
-            //this.model.scale.set(0.01,0.01,0.01);
             mixer = new THREE.AnimationMixer(this.model);
 
             const action = mixer.clipAction(this.model.animations[0]);
@@ -50,9 +52,9 @@ function Boat(scene, loadingManager) {
                 }
             })
             scene.add(this.model);
+            this.model.position = new THREE.Vector3(0,10,0);
+            physicsBody = new PhysicsBody(this.model);
         }).bind(this));
-
-
     var slowdown = 0.03;
     var haltDirection;
 
@@ -85,25 +87,57 @@ function Boat(scene, loadingManager) {
             velocity.clampLength(-0.04, 0.04);
             this.model.position.set(this.model.position.x + velocity.x, this.model.position.y + velocity.y, this.model.position.z + velocity.z);
             this.model.rotateY(rotationOffset);
+
+            if(physicsBody){ 
+                physicsBody.UpdatePhysics();
+                // console.log("Updating Physics");
+            }
         }
     }
 
+    var cameraMoveBooleandown;
+    var cameraMoveBooleanmove;
+    this.PointerDownEvent = function() 
+    { 
+        cameraMoveBooleandown = true;
+        console.log("more mouseclick");
+    };
+
+    this.PointerMoveEvent = function() 
+    { 
+        if(cameraMoveBooleandown){
+        cameraMoveBooleanmove = true;
+        }
+    };
+
+    this.PointerUpEvent = function() 
+    { 
+        if(!cameraMoveBooleanmove){
+            cameraMoveBooleandown = false;
+        }
+    };
+
     //The camera will stay with the boat.
     //I'll have to change this when the player is close to an island to see info better.
-    this.UpdateCameraPos = function (camera) {
-        if (this.model) {
+    this.UpdateCameraPos = function (camera, currentlyPressedKey) {
+        if (this.model && (!cameraMoveBooleandown && !cameraMoveBooleanmove)) {
             camera.position.x = this.model.position.x;
-            camera.position.y = this.model.position.y + 6;
-            camera.position.z = this.model.position.z - 6;
+            camera.position.y = this.model.position.y + 10;
+            camera.position.z = this.model.position.z - 10;
+        }        
+
+        if(currentlyPressedKey == 82){
+            cameraMoveBooleandown = false;
+            cameraMoveBooleanmove = false;
         }
     }
 
     this.animate = function(clock) {
         // animation with THREE.AnimationMixer.update(timedelta)
-        var delta = clock.getDelta();                
+        var delta = clock.getDelta();            
         if (mixer) {
-            if(this.mixer){ mixer.update(delta);}
-            console.log(mixer.time);
+            if(mixer){ mixer.update(delta);}
+            //console.log(mixer.time);
         }
     }
 }
