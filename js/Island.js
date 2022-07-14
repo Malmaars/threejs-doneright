@@ -1,4 +1,4 @@
-function Island(scene, loadingManager)
+function Island(scene, loadingManager, location)
 {
     //This function regulates the islands, which will portray my projects. I want to code it in a way that I can easily add more.
     const texLoader = new THREE.TextureLoader(loadingManager);
@@ -48,7 +48,8 @@ function Island(scene, loadingManager)
         {
             if(this.model){
                 this.model.scale.set(0.5,0.5,0.5);
-            this.model.position.set(15,-1,-10);
+            this.model.position.set(location.x, location.y, location.z);
+            // this.model.position.set(15,-1,-10);
             }
         }
 }
