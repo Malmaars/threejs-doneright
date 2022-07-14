@@ -1,6 +1,6 @@
 //git add .
 //git commit -m "name of commit"
-//git push origin
+//git push origin master
 //npm run deploy
 
 //loading
