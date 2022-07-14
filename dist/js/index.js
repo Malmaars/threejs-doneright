@@ -109,7 +109,10 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 var boat = new Boat(scene, loadingManager);
-var sea = new Sea(scene);
+var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
+var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/Water.png', -1, 1);
+var island = new Island(scene, loadingManager);
+
 
 /**
  * Animate
@@ -121,6 +124,7 @@ var rotSpeed = 0.02;
 
 var posOffset = 0;
 var rotOffset = 0;
+var currentlyPressedKey;
 
 //get key input
 document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -141,6 +145,8 @@ function onDocumentKeyDown(event) {
     if (keyCode == 68 || keyCode == 39) {
         rotOffset = -rotSpeed;
     }
+
+    currentlyPressedKey = keyCode;
 };
 
 //input to check wether the player lets go of certain keys to let them stop moving
@@ -157,17 +163,39 @@ function onDocumentKeyUp(event) {
     }
 }
 
-const clock = new THREE.Clock()
+
+
+
+
+
+const clock = new THREE.Clock();
+
+const mouse = new Mouse(camera);
+
+onpointerdown = (event) => {
+    mouse.PointerDownEvent();
+    boat.PointerDownEvent();
+}
+onpointermove = (event) => {
+    boat.PointerMoveEvent();
+    mouse.PointerMoveEvent(event);
+}
+onpointerup = (event) => {
+    mouse.PointerUpEvent();
+    boat.PointerUpEvent();
+    
+}
 
 //this updates frames.
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
-
+    island.Initialize();
     // Update objects
 
     boat.Update(posOffset, rotOffset);
 
-    boat.UpdateCameraPos(camera);
+    mouse.UpdateCamera();
+    boat.UpdateCameraPos(camera, currentlyPressedKey);
     boat.animate(clock);
 
     // Update Orbital Controls
