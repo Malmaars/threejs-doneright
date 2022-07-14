@@ -29,7 +29,7 @@ function Mouse(_camera)
         velocity.set(offset.x * 0.03, 0, offset.z * 0.03);
 
         console.log(offset);
-        camera.position.set(previousCameraPos.x + offset.x * 0.03 + velocity.x, previousCameraPos.y, previousCameraPos.z + offset.z * 0.03 + velocity.z);
+        camera.position.set(previousCameraPos.x + offset.x * 0.03, previousCameraPos.y, previousCameraPos.z + offset.z * 0.03);
         console.log(camera.position);
         }
         previousMousePosition = new THREE.Vector3(event.screenX, 0, event.screenY);

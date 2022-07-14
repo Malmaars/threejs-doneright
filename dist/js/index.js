@@ -1,3 +1,8 @@
+//git add .
+//git commit -m "name of commit"
+//git push origin
+//npm run deploy
+
 //loading
 const loadingManager = new THREE.LoadingManager()
 loadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
@@ -8,6 +13,9 @@ loadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
 loadingManager.onLoad = function ( ) {
 
+    for (let i = 0; i < islands.length; i++){
+        islands[i].Initialize();
+    }
 	console.log( 'Loading complete!');
 
 };
@@ -111,7 +119,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 var boat = new Boat(scene, loadingManager);
 var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
 var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/Water.png', -1, 1);
-var island = new Island(scene, loadingManager);
+ 
+const islands = [
+    new Island(scene, loadingManager, new THREE.Vector3(15, -1, -15)),
+    new Island(scene, loadingManager, new THREE.Vector3(-15, -1, -15)),
+    new Island(scene, loadingManager, new THREE.Vector3(15, -1 , 15)),
+    new Island(scene, loadingManager, new THREE.Vector3(-15, -1 , 15))
+]
 
 
 /**
@@ -189,7 +203,6 @@ onpointerup = (event) => {
 //this updates frames.
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
-    island.Initialize();
     // Update objects
 
     boat.Update(posOffset, rotOffset);
