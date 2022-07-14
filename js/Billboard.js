@@ -1,20 +1,17 @@
-function Island(scene, loadingManager, location)
-
+function Billboard(scene, loadingManager, path, location)
 {
-    const billboard = new Billboard(scene, loadingManager, "resources/textures/Billboards/billboard_HeadOff.png", new THREE.Vector3(location.x, location.y + 1.65, location.z));
-    //This function regulates the islands, which will portray my projects. I want to code it in a way that I can easily add more.
     const texLoader = new THREE.TextureLoader(loadingManager);
 
-    var islandMaterial;
+    var billBoardMaterial;
 
     texLoader.load(
         // resource URL
-        "resources/textures/BasicIslandTextures/lambert1_Base_color.png",
+        path,
 
         // onLoad callback
         function (texture) {
             // in this example we create the material when the texture is loaded
-            islandMaterial = new THREE.MeshStandardMaterial({
+            billBoardMaterial = new THREE.MeshStandardMaterial({
                 map: texture
             });
         },
@@ -32,14 +29,14 @@ function Island(scene, loadingManager, location)
     this.model;
 
     modelLoader.load
-        ('resources/models/BasicIsland.fbx', (function (object) {
+        ('resources/models/billboard.fbx', (function (object) {
 
             this.model = object;
 
             object.traverse(function (child) {
                 if (child.isMesh) {
-                    islandMaterial.metalness = 0;
-                    child.material = islandMaterial;
+                    billBoardMaterial.metalness = 0;
+                    child.material = billBoardMaterial;
                     
                 }
             })
@@ -50,10 +47,9 @@ function Island(scene, loadingManager, location)
         {
             if(this.model){
                 this.model.scale.set(0.5,0.5,0.5);
-            this.model.position.set(location.x, location.y, location.z);
-            // this.model.position.set(15,-1,-10);'
-
-            billboard.Initialize();
+                this.model.rotation.set(0,90 * Math.PI/180,0);
+                this.model.position.set(location.x, location.y, location.z);
             }
         }
+
 }

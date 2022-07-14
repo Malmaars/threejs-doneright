@@ -1,6 +1,6 @@
 //git add .
 //git commit -m "name of commit"
-//git push origin
+//git push origin master
 //npm run deploy
 
 //loading
@@ -117,8 +117,8 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 var boat = new Boat(scene, loadingManager);
-var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
-var sea = new Sea(scene, loadingManager, 'resources/textures/Sea/Water.png', -1, 1);
+var Uppersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
+var Lowersea = new Sea(scene, loadingManager, 'resources/textures/Sea/Water.png', -1, 1);
  
 const islands = [
     new Island(scene, loadingManager, new THREE.Vector3(15, -1, -15)),
@@ -175,6 +175,8 @@ function onDocumentKeyUp(event) {
     if (keyCode == 68 || keyCode == 39 || keyCode == 65 || keyCode == 37) {
         rotOffset = 0;
     }
+
+    currentlyPressedKey = null;
 }
 
 
