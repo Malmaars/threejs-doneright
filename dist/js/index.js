@@ -16,6 +16,7 @@ loadingManager.onLoad = function ( ) {
     for (let i = 0; i < islands.length; i++){
         islands[i].Initialize();
     }
+    boat.Initialize();
 	console.log( 'Loading complete!');
 
 };
@@ -118,13 +119,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 var boat = new Boat(scene, loadingManager);
 var Uppersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
-var Lowersea = new Sea(scene, loadingManager, 'resources/textures/Sea/Water.png', -1, 1);
+var Lowersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(scene, loadingManager, new THREE.Vector3(15, -1, -15)),
-    new Island(scene, loadingManager, new THREE.Vector3(-15, -1, -15)),
-    new Island(scene, loadingManager, new THREE.Vector3(15, -1 , 15)),
-    new Island(scene, loadingManager, new THREE.Vector3(-15, -1 , 15))
+    new Island(scene, loadingManager, boat, new THREE.Vector3(15, -1, -15), "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
+    ['Headoff is an experiment where I tried',
+     'out making AI using a behaviourtree.',
+     'The goal was only to make an AI, but I',
+     'made a small gameplay loop with it']),
+
+     new Island(scene, loadingManager, boat, new THREE.Vector3(-15, -1, -15), "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
+     ['Knowhere Express was my submission to',
+      'the Global Gamejam of 2022, where I',
+      'contributed as the only developer on',
+      'the team.',
+      'You might notice the screenshots are',
+      '1 by 1. That`s because we wanted to',
+      'capture a weird feeling, mixing high',
+      'detail textures with ps1 esc graphics.']),
 ]
 
 
@@ -211,7 +223,12 @@ const tick = () => {
 
     mouse.UpdateCamera();
     boat.UpdateCameraPos(camera, currentlyPressedKey);
-    boat.animate(clock);
+
+    for (let i = 0; i < islands.length; i++){
+        islands[i].Update();
+    }
+
+    //boat.animate(clock);
 
     // Update Orbital Controls
     // controls.update()
@@ -220,7 +237,7 @@ const tick = () => {
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    window.requestAnimationFrame(tick);
 }
 
 tick()

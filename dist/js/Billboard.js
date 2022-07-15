@@ -29,13 +29,14 @@ function Billboard(scene, loadingManager, path, location)
     this.model;
 
     modelLoader.load
-        ('resources/models/billboard.fbx', (function (object) {
+        ('resources/models/billboardV2.fbx', (function (object) {
 
             this.model = object;
 
             object.traverse(function (child) {
                 if (child.isMesh) {
                     billBoardMaterial.metalness = 0;
+                    billBoardMaterial.transparent = true;
                     child.material = billBoardMaterial;
                     
                 }
