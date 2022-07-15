@@ -1,9 +1,13 @@
 //const { LoadingManager } = require("three");
 
-function Island(scene, loadingManager, location, descriptions)
-
+function Island(scene, loadingManager, boatReference, location, billboardTexture, descriptions)
 {
-    const billboard = new Billboard(scene, loadingManager, "resources/textures/Billboards/billboard_HeadOff.png", new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
+    const billboard = new Billboard(scene, loadingManager, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
+    const platform = new Platform(scene, loadingManager, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference);
+    const tree = [
+        new Tree(scene, loadingManager, new THREE.Vector3(location.x + 3, location.y + 1.65, location.z - 7)),
+        new Tree(scene, loadingManager, new THREE.Vector3(location.x - 4, location.y + 1.65, location.z - 6)),
+    ]
     //This function regulates the islands, which will portray my projects. I want to code it in a way that I can easily add more.
     const texLoader = new THREE.TextureLoader(loadingManager);
 
@@ -11,7 +15,7 @@ function Island(scene, loadingManager, location, descriptions)
 
     texLoader.load(
         // resource URL
-        "resources/textures/BasicIslandTextures/lambert1_Base_color.png",
+        "resources/textures/BasicIslandTextures/Island_Big_WithDock.png",
 
         // onLoad callback
         function (texture) {
@@ -36,7 +40,7 @@ function Island(scene, loadingManager, location, descriptions)
     this.model;
 
     modelLoader.load
-        ('resources/models/BiggerIsland.fbx', (function (object) {
+        ('resources/models/BiggerIslandWithDock.fbx', (function (object) {
 
             this.model = object;
 
@@ -49,14 +53,6 @@ function Island(scene, loadingManager, location, descriptions)
             })
             scene.add(this.model);
         }).bind(this));
-
-        descriptions = [
-            'Checking what the maximum width is.',
-            'Every piece of text is lower than the last',
-            'But I need to write it out like this,',
-            'Because I honestly don`t know how else',
-            'I`d do it'
-        ]
         
         const fontLoader = new THREE.FontLoader(loadingManager);
         
@@ -77,7 +73,7 @@ function Island(scene, loadingManager, location, descriptions)
                 material.metalness = 0;
                 textMesh1 = new THREE.Mesh( geometry, material);
                 textMesh1.scale.set(0.004,0.004,0.004);
-                textMesh1.position.set(location.x + 4, location.y + 2, (location.z + 1)  - i * 0.8);
+                textMesh1.position.set(location.x + 3.5, location.y + 2, (location.z + 1)  - i * 0.8);
                 textMesh1.rotation.x = Math.PI * 0.4;
                 textMesh1.rotation.y = Math.PI * 1;
                 scene.add(textMesh1);
@@ -92,6 +88,15 @@ function Island(scene, loadingManager, location, descriptions)
             // this.model.position.set(15,-1,-10);'
 
             billboard.Initialize();
+            platform.Initialize();
+
+            for(let i = 0; i < tree.length; i++){
+                tree[i].Initialize();
             }
+            }
+        }
+
+        this.Update = function(){
+            platform.Update();
         }
 }

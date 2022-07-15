@@ -6,6 +6,7 @@ function Boat(scene, loadingManager) {
     const texLoader = new THREE.TextureLoader(loadingManager);
 
     var boatMaterial;
+    var propellor;
 
     // load a resource
     texLoader.load(
@@ -33,28 +34,29 @@ function Boat(scene, loadingManager) {
     const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
     var mixer;
+    var action;
 
     //load in the boat, from reference in the resource folder.
     modelLoader.load
         ('resources/models/BoatAnimated.fbx', (function (object) {
 
             this.model = object;
-            mixer = new THREE.AnimationMixer(this.model);
+            //mixer = new THREE.AnimationMixer(this.model);
 
-            const action = mixer.clipAction(this.model.animations[0]);
-            action.play();
-
+            console.log(this.model.animations[0]);
+            //action = mixer.clipAction(this.model.animations[0]);
             object.traverse(function (child) {
                 if (child.isMesh) {
                     boatMaterial.metalness = 0;
                     child.material = boatMaterial;
-                    
                 }
             })
             scene.add(this.model);
+            //action.play();
             this.model.position = new THREE.Vector3(0,10,0);
             physicsBody = new PhysicsBody(this.model);
         }).bind(this));
+
     var slowdown = 0.03;
     var haltDirection;
 
@@ -126,18 +128,25 @@ function Boat(scene, loadingManager) {
             camera.position.z = this.model.position.z - 10;
         }        
 
-        if(currentlyPressedKey == 82){
+        if(currentlyPressedKey == 87 || currentlyPressedKey == 65 || currentlyPressedKey == 83 || currentlyPressedKey == 68
+            || currentlyPressedKey == 38 || currentlyPressedKey == 40 || currentlyPressedKey == 39 || currentlyPressedKey == 37){
             cameraMoveBooleandown = false;
             cameraMoveBooleanmove = false;
         }
     }
 
+    this.Initialize = function(){
+        // this.model.add(propellor);
+        // propellor.rotation.y = -90 * Math.PI/180;
+    }
+
     this.animate = function(clock) {
         // animation with THREE.AnimationMixer.update(timedelta)
-        var delta = clock.getDelta();            
+        var delta = clock.getDelta();       
         if (mixer) {
-            if(mixer){ mixer.update(delta);}
-            //console.log(mixer.time);
+            action = mixer.clipAction(this.model.animations[0]);
+            mixer.update(delta);
+            console.log(action);
         }
     }
 }
