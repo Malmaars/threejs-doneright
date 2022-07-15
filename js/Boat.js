@@ -1,4 +1,4 @@
-const { Vector2 } = require("three");
+//const { Vector2 } = require("three");
 
 //The script for the boat
 function Boat(scene, loadingManager) {
