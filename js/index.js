@@ -122,13 +122,16 @@ var Uppersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank
 var Lowersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(scene, loadingManager, boat, new THREE.Vector3(15, -1, -15), "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
+    new Island(scene, loadingManager, boat, new THREE.Vector3(15, -1, -15), 
+    "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     ['Headoff is an experiment where I tried',
      'out making AI using a behaviourtree.',
      'The goal was only to make an AI, but I',
-     'made a small gameplay loop with it']),
+     'made a small gameplay loop with it'],
+     "https://smos-bois.itch.io/head-off"),
 
-     new Island(scene, loadingManager, boat, new THREE.Vector3(-15, -1, -15), "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
+     new Island(scene, loadingManager, boat, new THREE.Vector3(-15, -1, -15),
+      "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
      ['Knowhere Express was my submission to',
       'the Global Gamejam of 2022, where I',
       'contributed as the only developer on',
@@ -136,7 +139,8 @@ const islands = [
       'You might notice the screenshots are',
       '1 by 1. That`s because we wanted to',
       'capture a weird feeling, mixing high',
-      'detail textures with ps1 esc graphics.']),
+      'detail textures with ps1 esc graphics.'],
+      "https://mirnavsteenbergen.itch.io/the-knowhere-express"),
 ]
 
 
@@ -173,6 +177,10 @@ function onDocumentKeyDown(event) {
     }
 
     currentlyPressedKey = keyCode;
+
+    for (let i = 0; i < islands.length; i++){
+        islands[i].OnButtonDown(event);
+    }
 };
 
 //input to check wether the player lets go of certain keys to let them stop moving
@@ -189,6 +197,9 @@ function onDocumentKeyUp(event) {
     }
 
     currentlyPressedKey = null;
+    for (let i = 0; i < islands.length; i++){
+        islands[i].OnButtonUp(event);
+    }
 }
 
 

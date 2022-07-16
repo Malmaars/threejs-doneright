@@ -1,4 +1,4 @@
-function Platform(scene, loadingManager, location, boatReference) {
+function Platform(scene, loadingManager, location, boatReference, link) {
     
     const texLoader = new THREE.TextureLoader(loadingManager);
 
@@ -78,15 +78,31 @@ function Platform(scene, loadingManager, location, boatReference) {
             }
         }
 
+        var currentlyPressedKey;
+
         this.Update = function(){
             if(boatReference.model && this.model && extension){
                 if(boatReference.model.position.distanceTo(this.model.position) < 3){
                     extension.position.set(location.x, location.y + 1, location.z);
+
+                    if(currentlyPressedKey == 13){
+                        console.log("REDIRECT");
+                        window.open(link, link).focus()
+                        currentlyPressedKey = null;
+                    }
                 }
 
                 else{
                     extension.position.set(location.x, location.y - 0.5, location.z);
                 }
             }
+        }
+
+        this.OnButtonDown = function(event){
+            currentlyPressedKey = event.which;
+        }
+
+        this.OnButtonUp = function(event){
+            currentlyPressedKey = null;
         }
 }
