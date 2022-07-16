@@ -1,6 +1,4 @@
-function Platform(scene, loadingManager, location, boatReference, link) {
-    
-    const texLoader = new THREE.TextureLoader(loadingManager);
+function Platform(scene, modelLoader, texLoader, location, boatReference, link) {
 
     var platformMaterial;
 
@@ -25,9 +23,6 @@ function Platform(scene, loadingManager, location, boatReference, link) {
         }
     );
 
-     
-
-    const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
 
     modelLoader.load

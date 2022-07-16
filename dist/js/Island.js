@@ -2,16 +2,15 @@
 
 const { PlaneGeometry } = require("three");
 
-function Island(scene, loadingManager, boatReference, location, billboardTexture, descriptions, link)
+function Island(scene, fontLoader, modelLoader, texLoader, boatReference, location, billboardTexture, title, descriptions, link)
 {
-    const billboard = new Billboard(scene, loadingManager, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
-    const platform = new Platform(scene, loadingManager, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference, link);
+    const billboard = new Billboard(scene, modelLoader, texLoader, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
+    const platform = new Platform(scene, modelLoader, texLoader, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference, link);
     const tree = [
-        new Tree(scene, loadingManager, new THREE.Vector3(location.x + 3, location.y + 1.65, location.z - 7)),
-        new Tree(scene, loadingManager, new THREE.Vector3(location.x - 4, location.y + 1.65, location.z - 6)),
+        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x + 3, location.y + 1.65, location.z - 7)),
+        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x - 4, location.y + 1.65, location.z - 6)),
     ]
     //This function regulates the islands, which will portray my projects. I want to code it in a way that I can easily add more.
-    const texLoader = new THREE.TextureLoader(loadingManager);
 
     var islandMaterial;
 
@@ -36,9 +35,6 @@ function Island(scene, loadingManager, boatReference, location, billboardTexture
         }
     );
 
-     
-
-    const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
 
     modelLoader.load
@@ -56,31 +52,42 @@ function Island(scene, loadingManager, boatReference, location, billboardTexture
             scene.add(this.model);
         }).bind(this));
         
-        const fontLoader = new THREE.FontLoader(loadingManager);
-        
-        for(let i = 0; i < descriptions.length; i++){
-            fontLoader.load( 'https://unpkg.com/three@0.77.0/examples/fonts/helvetiker_bold.typeface.json', function ( font ) {
+        fontLoader.load( 'https://unpkg.com/three@0.77.0/examples/fonts/helvetiker_bold.typeface.json', function ( font ) {
+            var geometry = new THREE.TextGeometry( title, {
+            font: font,
+            size: 120,
+            height: 5,
+            curveSegments: 12,
+            } );
+            var material = new THREE.MeshStandardMaterial();
+            material.metalness = 0;
+            textMesh1 = new THREE.Mesh( geometry, material);
+            textMesh1.scale.set(0.004,0.004,0.004);
+            textMesh1.position.set(location.x + 3.5, location.y + 2, location.z + 1.5);
+            textMesh1.rotation.x = Math.PI * 0.4;
+            textMesh1.rotation.y = Math.PI * 1;
+            scene.add(textMesh1);
+        } );
+
+            fontLoader.load( 'https://unpkg.com/three@0.77.0/examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
+                for(let i = 0; i < descriptions.length; i++){
                 var geometry = new THREE.TextGeometry( descriptions[i], {
                 font: font,
                 size: 80,
                 height: 5,
                 curveSegments: 12,
-                bevelEnabled: false,
-                bevelThickness: 10,
-                bevelSize: 8,
-                bevelOffset: 0,
-                bevelSegments: 5
                 } );
                 var material = new THREE.MeshStandardMaterial();
                 material.metalness = 0;
                 textMesh1 = new THREE.Mesh( geometry, material);
                 textMesh1.scale.set(0.004,0.004,0.004);
-                textMesh1.position.set(location.x + 3.5, location.y + 2, (location.z + 1)  - i * 0.8);
+                textMesh1.position.set(location.x + 3.5, location.y + 2, (location.z + 0.5)  - i * 0.8);
                 textMesh1.rotation.x = Math.PI * 0.4;
                 textMesh1.rotation.y = Math.PI * 1;
                 scene.add(textMesh1);
+            }
             } );
-        }
+        
 
         this.Initialize = function () 
         {
