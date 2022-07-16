@@ -102,7 +102,7 @@ function Boat(scene, loadingManager) {
     this.PointerDownEvent = function() 
     { 
         cameraMoveBooleandown = true;
-        console.log("more mouseclick");
+        // console.log("more mouseclick");
     };
 
     this.PointerMoveEvent = function() 

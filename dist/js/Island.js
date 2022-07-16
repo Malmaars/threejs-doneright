@@ -1,9 +1,11 @@
 //const { LoadingManager } = require("three");
 
-function Island(scene, loadingManager, boatReference, location, billboardTexture, descriptions)
+const { PlaneGeometry } = require("three");
+
+function Island(scene, loadingManager, boatReference, location, billboardTexture, descriptions, link)
 {
     const billboard = new Billboard(scene, loadingManager, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
-    const platform = new Platform(scene, loadingManager, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference);
+    const platform = new Platform(scene, loadingManager, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference, link);
     const tree = [
         new Tree(scene, loadingManager, new THREE.Vector3(location.x + 3, location.y + 1.65, location.z - 7)),
         new Tree(scene, loadingManager, new THREE.Vector3(location.x - 4, location.y + 1.65, location.z - 6)),
@@ -98,5 +100,13 @@ function Island(scene, loadingManager, boatReference, location, billboardTexture
 
         this.Update = function(){
             platform.Update();
+        }
+
+        this.OnButtonDown = function(event){
+            platform.OnButtonDown(event);
+        }
+
+        this.OnButtonUp = function(event){
+            platform.OnButtonUp(event)
         }
 }
