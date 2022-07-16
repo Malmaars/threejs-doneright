@@ -1,6 +1,6 @@
 //const { LoadingManager } = require("three");
 
-const { PlaneGeometry } = require("three");
+//const { PlaneGeometry } = require("three");
 
 function Island(scene, fontLoader, modelLoader, texLoader, boatReference, location, billboardTexture, title, descriptions, link)
 {

@@ -5,6 +5,17 @@ function Boat(scene, modelLoader, texLoader) {
 
     var boatMaterial;
     var propellor;
+    var cloudObjectPool = new ObjectPool();
+
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
 
     // load a resource
     texLoader.load(
@@ -132,18 +143,55 @@ function Boat(scene, modelLoader, texLoader) {
         }
     }
 
+    var Clouds = [];
     this.Initialize = function(){
-        // this.model.add(propellor);
-        // propellor.rotation.y = -90 * Math.PI/180;
+        this.GenerateCloud();
     }
+
+    this.GenerateCloud = function(){
+        if(cloudObjectPool.CheckInActivePoolLength() == 0){
+            console.log("objectpool is empty");
+        }
+        var singleCloud = cloudObjectPool.TakeFromPool();
+        var startPosition = this.model.position;
+        var direction = new THREE.Vector3();
+        this.model.getWorldDirection(direction);
+        startPosition = new THREE.Vector3(startPosition.x + direction.x * 0.8, startPosition.y + 1.5, startPosition.z + direction.z * 0.8);
+
+        singleCloud.ResetAnimation(startPosition);
+
+        Clouds.push(singleCloud);
+    }
+
+    var cloudclock = 0;
 
     this.animate = function(clock) {
         // animation with THREE.AnimationMixer.update(timedelta)
-        var delta = clock.getDelta();       
-        if (mixer) {
-            action = mixer.clipAction(this.model.animations[0]);
-            mixer.update(delta);
-            console.log(action);
+        // var delta = clock.getDelta();       
+        // if (mixer) {
+        //     action = mixer.clipAction(this.model.animations[0]);
+        //     mixer.update(delta);
+        //     console.log(action);
+        // }
+        for (let i = 0; i < Clouds.length; i++){
+            if(Clouds[i]){
+                Clouds[i].AnimateCloud();
+        
+                console.log(Clouds[i].CheckOpacity());
+                if(Clouds[i].CheckOpacity() <= 0){
+                    cloudObjectPool.ReturnToPool(Clouds[i]);
+                    Clouds.shift();
+                    }
+                }
+        }
+
+        cloudclock += 0.005;
+
+        if(cloudclock >= 1){
+            if(this.model){
+            this.GenerateCloud();
+            }
+            cloudclock = 0;
         }
     }
 }
