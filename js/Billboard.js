@@ -1,7 +1,5 @@
-function Billboard(scene, loadingManager, path, location)
+function Billboard(scene, modelLoader, texLoader, path, location)
 {
-    const texLoader = new THREE.TextureLoader(loadingManager);
-
     var billBoardMaterial;
 
     texLoader.load(
@@ -25,7 +23,6 @@ function Billboard(scene, loadingManager, path, location)
         }
     );
 
-    const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
 
     modelLoader.load

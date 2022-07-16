@@ -117,21 +117,27 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-var boat = new Boat(scene, loadingManager);
-var Uppersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
-var Lowersea = new Sea(scene, loadingManager, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
+const modelLoader = new THREE.FBXLoader(loadingManager);
+const texLoader = new THREE.TextureLoader(loadingManager);
+const fontLoader = new THREE.FontLoader(loadingManager);
+
+var boat = new Boat(scene, modelLoader, texLoader);
+var Uppersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
+var Lowersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(scene, loadingManager, boat, new THREE.Vector3(15, -1, -15), 
+    new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(15, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
+    "HEAD OFF",
     ['Headoff is an experiment where I tried',
      'out making AI using a behaviourtree.',
      'The goal was only to make an AI, but I',
      'made a small gameplay loop with it'],
      "https://smos-bois.itch.io/head-off"),
 
-     new Island(scene, loadingManager, boat, new THREE.Vector3(-15, -1, -15),
+     new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(-15, -1, -15),
       "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
+      "Knowhere Express",
      ['Knowhere Express was my submission to',
       'the Global Gamejam of 2022, where I',
       'contributed as the only developer on',

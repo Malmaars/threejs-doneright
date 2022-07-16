@@ -1,9 +1,7 @@
 //const { Vector2 } = require("three");
 
 //The script for the boat
-function Boat(scene, loadingManager) {
-
-    const texLoader = new THREE.TextureLoader(loadingManager);
+function Boat(scene, modelLoader, texLoader) {
 
     var boatMaterial;
     var propellor;
@@ -31,7 +29,6 @@ function Boat(scene, loadingManager) {
     );
 
     var physicsBody;
-    const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
     var mixer;
     var action;

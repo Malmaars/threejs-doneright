@@ -1,7 +1,5 @@
-function Tree(scene, loadingManager, location)
+function Tree(scene, modelLoader, texLoader, location)
 {
-    const texLoader = new THREE.TextureLoader(loadingManager);
-
     var treeMaterial;
 
     texLoader.load(
@@ -25,7 +23,6 @@ function Tree(scene, loadingManager, location)
         }
     );
 
-    const modelLoader = new THREE.FBXLoader(loadingManager)
     this.model;
 
     modelLoader.load

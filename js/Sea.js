@@ -1,6 +1,5 @@
 //This script is for the sea..
-function Sea(scene, loadingManager, path, height, opacity) {
-    const textureLoader = new THREE.TextureLoader(loadingManager);
+function Sea(scene, textureLoader, path, height, opacity) {
     const map = textureLoader.load(path);
 
     //repeat the texture, so it's not a giant texture that's very pixelized
