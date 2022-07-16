@@ -129,10 +129,12 @@ const islands = [
     new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(15, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     "HEAD OFF",
-    ['Headoff is an experiment where I tried',
+    ['Head off is a small game made to try',
      'out making AI using a behaviourtree.',
-     'The goal was only to make an AI, but I',
-     'made a small gameplay loop with it'],
+     'This project was made for a school',
+     'assignment, and wasn`t supposed to',
+     'have gameplay, but I added a small',
+     'gameplay loop nonetheless.'],
      "https://smos-bois.itch.io/head-off"),
 
      new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(-15, -1, -15),
@@ -245,7 +247,7 @@ const tick = () => {
         islands[i].Update();
     }
 
-    //boat.animate(clock);
+    boat.animate(clock);
 
     // Update Orbital Controls
     // controls.update()
