@@ -52,6 +52,7 @@ function Boat(scene, modelLoader, texLoader, engine) {
     // var boatBox = Matter.Bodies.rectangle(0, 0, 30, 10);
     Matter.Composite.add(engine.world, boatBox);
     Matter.Body.setDensity(boatBox, 0.1);
+    boatBox.friction = 0.01;
 
     //load in the boat, from reference in the resource folder.
     modelLoader.load
@@ -74,11 +75,12 @@ function Boat(scene, modelLoader, texLoader, engine) {
 
     var slowdown = 0.03;
     var haltDirection;
+    var speed = 10;
 
     //I use velocity and add it to the position of the boat, so it drifts more, like it should at sea
     var velocity = new THREE.Vector3();
 
-    this.Update = function (positionOffset, rotationOffset) {
+    this.Update = function (positionOffset, rotationOffset, deltaTime) {
         if (this.collider) {
             var moveDirection = new THREE.Vector3();
             this.collider.getWorldDirection(moveDirection);
@@ -106,14 +108,15 @@ function Boat(scene, modelLoader, texLoader, engine) {
             // physicsBody.AddVelocity(velocity);
             // this.collider.rotateY(rotationOffset);
 
-            boatBox.torque = -rotationOffset * boatBox.density;
+            console.log(deltaTime);
+            boatBox.torque = -rotationOffset * boatBox.density * deltaTime * 150;
             // Matter.Body.rotate(boatBox,-rotationOffset);
             console.log(boatBox.angle);
             this.collider.rotation.set(0,-boatBox.angle + Math.PI/2, 0);
 
             // console.log(moveDirection.z * -positionOffset / 10000);
             // console.log(boatBox.velocity);
-            Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset * boatBox.mass / 10, y: Math.sin(boatBox.angle) * -positionOffset * boatBox.mass / 10});
+            Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset * boatBox.mass * deltaTime * speed, y: Math.sin(boatBox.angle) * -positionOffset * boatBox.mass * deltaTime * speed});
 
 
             this.collider.position.set(boatBox.position.x / 10, this.collider.position.y, boatBox.position.y / 10);

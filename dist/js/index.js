@@ -261,12 +261,14 @@ onpointerup = (event) => {
 
 //this updates frames.
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime();
+    var delta = clock.getDelta();
+    console.log(clock.getDelta());
+
     if(initialized == true){
     physicsManager.Update();
     }
     // Update objects
-    boat.Update(posOffset, rotOffset);
+    boat.Update(posOffset, rotOffset, delta);
 
     mouse.UpdateCamera();
     boat.UpdateCameraPos(camera, currentlyPressedKey);
