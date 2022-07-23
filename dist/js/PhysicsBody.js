@@ -1,24 +1,40 @@
-function PhysicsBody(object, colliderDimensions)
+function PhysicsBody(object, colliderDimensions, kinematic)
 {
     //this.object = object;
-    var velocity = new THREE.Vector3(0,0,0);
-    const gravity = -0.1;
+    this.velocity = new THREE.Vector3(0,0,0);
+    const gravity = -0.05;
+    this.kinematic = kinematic;
 
+    this.lastPosition = object.position;
     //vector 3 that gives height, width and length so I can calculate collisions;
-    const dimensions = colliderDimensions;
+    this.object = object;
+    this.dimensions = colliderDimensions;
+
+    this.Initialize = function(){
+        this.velocity = new THREE.Vector3(0,0,0);
+        this.lastposition = object.position;
+    }
+
     this.UpdatePhysics = function()
-    {
-        var lastposition = new THREE.Vector3(object.position.x, object.position.y, object.position.z); 
-        object.position.set(object.position.x + velocity.x, object.position.y + velocity.y + gravity, object.position.z + velocity.z);
+    { 
+        var offset = new THREE.Vector3(this.object.position.x - this.lastPosition.x, this.object.position.y - this.lastPosition.y, this.object.position.z - this.lastPosition.z);
+        // this.velocity = new THREE.Vector3(this.velocity.x + offset.x / 2, this.velocity.y + offset.y / 2,this.velocity.z + offset.z / 2);
+        this.velocity = new THREE.Vector3((this.velocity.x) * 0.9, (this.velocity.z)  * 0.9, (this.velocity.z)  * 0.9);
 
-        var offset = new THREE.Vector3(lastposition.x - object.position.x,lastposition.y - object.position.y,lastposition.z - object.position.z);
-        velocity.addVectors(velocity, offset);
-        // console.log(offset);
-        // console.log(object.position);
+        this.velocity.clamp(new THREE.Vector3(-0.1, -0.1, -0.1), new THREE.Vector3(0.1, 0.1, 0.1));
+        
 
+        this.velocity.set(this.velocity.x, 0, this.velocity.z);
 
-        if(object.position.y < -0.6){
-            velocity = new THREE.Vector3(velocity.x, velocity.y + 0.5, velocity.z);
-        }
+        this.lastPosition = new THREE.Vector3(this.object.position.x, this.object.position.y, this.object.position.z);
+        return this.velocity;
+    }
+
+    this.SetVelocity = function(newVelocity){
+        this.velocity = newVelocity;
+    }
+
+    this.AddVelocity = function(addedVector){
+        this.velocity = new THREE.Vector3(this.velocity.x + addedVector.x, this.velocity.y + addedVector.y, this.velocity.z + addedVector.z);
     }
 }

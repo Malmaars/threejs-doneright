@@ -2,13 +2,13 @@
 
 //const { PlaneGeometry } = require("three");
 
-function Island(scene, fontLoader, modelLoader, texLoader, boatReference, location, billboardTexture, title, descriptions, link)
+function Island(scene, fontLoader, modelLoader, texLoader, engine, boatReference, location, billboardTexture, title, descriptions, link)
 {
     const billboard = new Billboard(scene, modelLoader, texLoader, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
-    const platform = new Platform(scene, modelLoader, texLoader, new THREE.Vector3(location.x, location.y + 0.9, location.z - 11), boatReference, link);
+    const platform = new Platform(scene, modelLoader, texLoader, new THREE.Vector3(location.x, location.y + 0.9, location.z - 8), boatReference, link);
     const tree = [
-        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x + 3, location.y + 1.65, location.z - 7)),
-        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x - 4, location.y + 1.65, location.z - 6)),
+        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x + 6.5, location.y + 1.65, location.z - 0)),
+        new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x - 7, location.y + 1.65, location.z - 1)),
     ]
     //This function regulates the islands, which will portray my projects. I want to code it in a way that I can easily add more.
 
@@ -37,8 +37,25 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
 
     this.model;
 
+    var geometry = new THREE.BoxGeometry( 11, 5, 16 );
+    var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
+    this.collider = new THREE.Mesh( geometry, material );
+    scene.add( this.collider );
+
+    var verticesforIsland = Matter.Vertices.create([{ x: 0, y: 115 }, { x: 60, y: 100 }, { x: 70, y: 90 }, { x: 75, y: 65 },
+        { x: 75, y: 0 }, { x: 65, y: -40 }, { x: 70, y: -90 }, { x: 50, y: -105 },
+        { x: 0, y: -110 }, { x: -45, y: -100 }, { x: -60, y: -90 }, { x: -60, y: -50 }, 
+        { x: -80, y: 0 }, { x: -75, y: 30 }, { x: -80, y: 70 }, { x: -75, y: 95 }]);
+
+    var islandBox = Matter.Bodies.fromVertices(location.x * 10, location.z * 10, verticesforIsland);
+    Matter.Composite.add(engine.world, islandBox);
+    Matter.Body.scale(islandBox, 0.8, 0.8);
+    Matter.Body.setStatic(islandBox, true);
+    Matter.Body.rotate(islandBox,Math.PI / 2);
+
+
     modelLoader.load
-        ('resources/models/BiggerIslandWithDock.fbx', (function (object) {
+        ('resources/models/BiggerIslandWithDockRotated.fbx', (function (object) {
 
             this.model = object;
 
@@ -49,7 +66,7 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
                     
                 }
             })
-            scene.add(this.model);
+            this.collider.add(this.model);
         }).bind(this));
         
         fontLoader.load( 'https://unpkg.com/three@0.77.0/examples/fonts/helvetiker_bold.typeface.json', function ( font ) {
@@ -63,7 +80,7 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
             material.metalness = 0;
             textMesh1 = new THREE.Mesh( geometry, material);
             textMesh1.scale.set(0.004,0.004,0.004);
-            textMesh1.position.set(location.x + 3.5, location.y + 2, location.z + 1.5);
+            textMesh1.position.set(location.x + 1.5, location.y + 2, location.z + 1.5);
             textMesh1.rotation.x = Math.PI * 0.4;
             textMesh1.rotation.y = Math.PI * 1;
             scene.add(textMesh1);
@@ -81,7 +98,7 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
                 material.metalness = 0;
                 textMesh1 = new THREE.Mesh( geometry, material);
                 textMesh1.scale.set(0.004,0.004,0.004);
-                textMesh1.position.set(location.x + 3.5, location.y + 2, (location.z + 0.5)  - i * 0.8);
+                textMesh1.position.set(location.x + 5, location.y + 2, (location.z + 0.5)  - i * 0.8);
                 textMesh1.rotation.x = Math.PI * 0.4;
                 textMesh1.rotation.y = Math.PI * 1;
                 scene.add(textMesh1);
@@ -92,8 +109,9 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
         this.Initialize = function () 
         {
             if(this.model){
-                this.model.scale.set(0.8,0.8,0.8);
-            this.model.position.set(location.x, location.y, location.z);
+                //this.model.scale.set(0.8,0.8,0.8);
+                //this.model.rotateY(Math.PI);
+                //this.collider.position.set(location.x, location.y, location.z);
             // this.model.position.set(15,-1,-10);'
 
             billboard.Initialize();
@@ -107,6 +125,10 @@ function Island(scene, fontLoader, modelLoader, texLoader, boatReference, locati
 
         this.Update = function(){
             platform.Update();
+            
+            this.collider.position.set(islandBox.position.x/10, location.y, islandBox.position.y/10);
+            this.collider.rotation.set(0,-islandBox.angle + Math.PI, 0);
+            //this.collider.position.set(this.collider.position.x + velocity.x, this.collider.position.y + velocity.y, this.collider.position.z + velocity.z);
         }
 
         this.OnButtonDown = function(event){

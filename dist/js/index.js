@@ -3,22 +3,28 @@
 //git push origin master
 //npm run deploy
 
+var initialized = false;
 //loading
 const loadingManager = new THREE.LoadingManager()
 loadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
 	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-
+    //mmdLoader.createHelper();
 };
 
 loadingManager.onLoad = function ( ) {
 
+	console.log( 'Loading complete!');
+    console.log('Initializing');   
     for (let i = 0; i < islands.length; i++){
         islands[i].Initialize();
     }
-    boat.Initialize();
-	console.log( 'Loading complete!');
 
+    for (let i = 0; i < decoratives.length; i++){
+        decoratives[i].Initialize();
+    }
+    boat.Initialize();
+    initialized = true;
 };
 
 
@@ -33,6 +39,23 @@ loadingManager.onError = function ( url ) {
 	console.log( 'There was an error loading ' + url );
 
 };
+
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Composite = Matter.Composite;
+
+    
+const engine = Engine.create();
+
+engine.gravity.y = 0;
+const runner = Runner.create();
+
+Runner.run(runner, engine);
+
+
+
 
 //const normalTexture = textureLoader.load('/textures/SmallBricks.jpg')
 
@@ -72,7 +95,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () => {
+window.addEventListener('resize', () => {    
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -84,7 +107,7 @@ window.addEventListener('resize', () => {
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
+});
 
 /**
  * Camera
@@ -117,38 +140,41 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+const physicsManager = new PhysicsManager();
+
 const modelLoader = new THREE.FBXLoader(loadingManager);
 const texLoader = new THREE.TextureLoader(loadingManager);
 const fontLoader = new THREE.FontLoader(loadingManager);
 
-var boat = new Boat(scene, modelLoader, texLoader);
+var boat = new Boat(scene, modelLoader, texLoader, engine);
 var Uppersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
 var Lowersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(15, -1, -15),
+    new Island(scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(15, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     "HEAD OFF",
-    ['Head off is a small game made to try',
-     'out making AI using a behaviourtree.',
-     'This project was made for a school',
-     'assignment, and wasn`t supposed to',
-     'have gameplay, but I added a small',
-     'gameplay loop nonetheless.'],
+    ['Head off is a small game made to try out making',
+     'AI using a behaviourtree.This project was made',
+     'for a school assignment, and wasn`t supposed to',
+     'have gameplay, but I added a small gameplay loop',
+     'nonetheless.'],
      "https://smos-bois.itch.io/head-off"),
 
-     new Island(scene, fontLoader, modelLoader, texLoader, boat, new THREE.Vector3(-15, -1, -15),
+     new Island(scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(-15, -1, -15),
       "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
       "Knowhere Express",
-     ['Knowhere Express was my submission to',
-      'the Global Gamejam of 2022, where I',
-      'contributed as the only developer on',
-      'the team.',
-      'You might notice the screenshots are',
-      '1 by 1. That`s because we wanted to',
-      'capture a weird feeling, mixing high',
-      'detail textures with ps1 esc graphics.'],
+     ['Knowhere Express was my submission to the Global',
+      'Gamejam of 2022, where I contributed as the only',
+      'developer on the team.',
+      'You might notice the screenshots are 1 by 1. ',
+      'That`s because we wanted to capture a weird feeling,',
+      'mixing high detail textures with ps1 esc graphics.'],
       "https://mirnavsteenbergen.itch.io/the-knowhere-express"),
+]
+
+const decoratives = [
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyW.fbx', 'resources/textures/KeyW.png', new THREE.Vector3(10,-0.2,0), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0))
 ]
 
 
@@ -235,9 +261,11 @@ onpointerup = (event) => {
 
 //this updates frames.
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime()
+    const elapsedTime = clock.getElapsedTime();
+    if(initialized == true){
+    physicsManager.Update();
+    }
     // Update objects
-
     boat.Update(posOffset, rotOffset);
 
     mouse.UpdateCamera();
@@ -247,6 +275,10 @@ const tick = () => {
         islands[i].Update();
     }
 
+    for (let i = 0; i < decoratives.length; i++){
+        decoratives[i].Update();
+    }
+
     boat.animate(clock);
 
     // Update Orbital Controls
@@ -254,7 +286,6 @@ const tick = () => {
 
     // Render
     renderer.render(scene, camera)
-
     // Call tick again on the next frame
     window.requestAnimationFrame(tick);
 }

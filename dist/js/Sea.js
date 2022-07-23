@@ -17,7 +17,9 @@ function Sea(scene, textureLoader, path, height, opacity) {
     material.metalness = 0;
     material.fog = true;
     material.map = map;
+    if(opacity < 1){
     material.transparent = true;
+    }
     material.opacity = opacity;
     
 
