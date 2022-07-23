@@ -38,8 +38,8 @@ function Island(scene, fontLoader, modelLoader, texLoader, engine, boatReference
     this.model;
 
     var geometry = new THREE.BoxGeometry( 11, 5, 16 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
-    this.collider = new THREE.Mesh( geometry, material );
+    //var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
+    this.collider = new THREE.Object3D();
     scene.add( this.collider );
 
     var verticesforIsland = Matter.Vertices.create([{ x: 0, y: 115 }, { x: 60, y: 100 }, { x: 70, y: 90 }, { x: 75, y: 65 },

@@ -43,8 +43,8 @@ function Boat(scene, modelLoader, texLoader, engine) {
     var geometry = new THREE.BoxGeometry( 1, 1, 3 );
 
     console.log(geometry.parameters.width);
-    var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
-    this.collider = new THREE.Mesh( geometry, material );
+    //var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
+    this.collider = new THREE.Object3D();
     scene.add( this.collider );
 
     var verticesforBoat = Matter.Vertices.create([{ x: 15, y: 0 }, { x: 0, y: 5 }, { x: -15, y: 0 }, { x: 0, y: -5 }]);
