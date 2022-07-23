@@ -1,13 +1,13 @@
 function ObjectPool(){
 
-    var activePool = [];
-    var inActivePool = []
+    const activePool = [];
+    const inActivePool = []
     this.ReturnToPool = function(object){
         activePool.splice(object);
 
-        console.log('adding item to pool, pool size is ' + inActivePool.length);
+        // console.log('adding item to pool, pool size is ' + inActivePool.length);
         inActivePool.push(object);
-        console.log('added item to pool, pool size is ' + inActivePool.length);
+        // console.log('added item to pool, pool size is ' + inActivePool.length);
     }
 
     this.TakeFromPool = function(){

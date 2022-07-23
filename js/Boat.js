@@ -1,21 +1,16 @@
 //const { Vector2 } = require("three");
 
 //The script for the boat
-function Boat(scene, modelLoader, texLoader) {
+function Boat(scene, modelLoader, texLoader, engine) {
 
     var boatMaterial;
     var propellor;
     var cloudObjectPool = new ObjectPool();
 
+    for(let i = 0; i < 20; i++){
     cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
-    cloudObjectPool.ReturnToPool(new Cloud(scene, modelLoader, texLoader));
+    }
+
 
     // load a resource
     texLoader.load(
@@ -39,10 +34,23 @@ function Boat(scene, modelLoader, texLoader) {
         }
     );
 
-    var physicsBody;
     this.model;
     var mixer;
     var action;
+
+    //this.transform = new Ammo.btTransform();
+
+    var geometry = new THREE.BoxGeometry( 1, 1, 3 );
+
+    console.log(geometry.parameters.width);
+    var material = new THREE.MeshBasicMaterial( { color: 0xffffff, transparent: true, opacity: 0 } );
+    this.collider = new THREE.Mesh( geometry, material );
+    scene.add( this.collider );
+
+    var verticesforBoat = Matter.Vertices.create([{ x: 15, y: 0 }, { x: 0, y: 5 }, { x: -15, y: 0 }, { x: 0, y: -5 }]);
+    var boatBox = Matter.Bodies.fromVertices(0,0,verticesforBoat);
+    // var boatBox = Matter.Bodies.rectangle(0, 0, 30, 10);
+    Matter.Composite.add(engine.world, boatBox);
 
     //load in the boat, from reference in the resource folder.
     modelLoader.load
@@ -59,10 +67,8 @@ function Boat(scene, modelLoader, texLoader) {
                     child.material = boatMaterial;
                 }
             })
-            scene.add(this.model);
+            this.collider.add(this.model);
             //action.play();
-            this.model.position = new THREE.Vector3(0,10,0);
-            physicsBody = new PhysicsBody(this.model);
         }).bind(this));
 
     var slowdown = 0.03;
@@ -72,9 +78,9 @@ function Boat(scene, modelLoader, texLoader) {
     var velocity = new THREE.Vector3();
 
     this.Update = function (positionOffset, rotationOffset) {
-        if (this.model) {
+        if (this.collider) {
             var moveDirection = new THREE.Vector3();
-            this.model.getWorldDirection(moveDirection);
+            this.collider.getWorldDirection(moveDirection);
 
             //slow the boat down when you stop giving input
             if (positionOffset == 0 && haltDirection != null) {
@@ -94,14 +100,23 @@ function Boat(scene, modelLoader, texLoader) {
 
             //clamp the length to control the speed.
             //We don't do a usual clamp, because that would result eventually in moving only in degrees of 90.
-            velocity.clampLength(-0.04, 0.04);
-            this.model.position.set(this.model.position.x + velocity.x, this.model.position.y + velocity.y, this.model.position.z + velocity.z);
-            this.model.rotateY(rotationOffset);
+            velocity.clampLength(-0.01, 0.01);
 
-            if(physicsBody){ 
-                physicsBody.UpdatePhysics();
-                // console.log("Updating Physics");
-            }
+            // physicsBody.AddVelocity(velocity);
+            // this.collider.rotateY(rotationOffset);
+
+            boatBox.torque = -rotationOffset / 700;
+            // Matter.Body.rotate(boatBox,-rotationOffset);
+            console.log(boatBox.angle);
+            this.collider.rotation.set(0,-boatBox.angle + Math.PI/2, 0);
+
+            // console.log(moveDirection.z * -positionOffset / 10000);
+            // console.log(boatBox.velocity);
+            Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset / 100, y: Math.sin(boatBox.angle) * -positionOffset / 100});
+
+
+            this.collider.position.set(boatBox.position.x / 10, this.collider.position.y, boatBox.position.y / 10);
+            //console.log(moveDirection);
         }
     }
 
@@ -131,9 +146,10 @@ function Boat(scene, modelLoader, texLoader) {
     //I'll have to change this when the player is close to an island to see info better.
     this.UpdateCameraPos = function (camera, currentlyPressedKey) {
         if (this.model && (!cameraMoveBooleandown && !cameraMoveBooleanmove)) {
-            camera.position.x = this.model.position.x;
-            camera.position.y = this.model.position.y + 10;
-            camera.position.z = this.model.position.z - 10;
+            camera.position.lerp(new THREE.Vector3(this.collider.position.x, this.collider.position.y + 10, this.collider.position.z - 10), 0.1);
+            // camera.position.x = this.collider.position.x;
+            // camera.position.y = this.collider.position.y + 10;
+            // camera.position.z = this.collider.position.z - 10;
         }        
 
         if(currentlyPressedKey == 87 || currentlyPressedKey == 65 || currentlyPressedKey == 83 || currentlyPressedKey == 68
@@ -145,7 +161,10 @@ function Boat(scene, modelLoader, texLoader) {
 
     var Clouds = [];
     this.Initialize = function(){
-        this.GenerateCloud();
+        //this.GenerateCloud();
+        this.model.position.set(-0.08,-0.5,0);
+        this.collider.rotateY(Math.PI/2);   
+        this.collider.position.set(0,0.6,0);
     }
 
     this.GenerateCloud = function(){
@@ -153,9 +172,9 @@ function Boat(scene, modelLoader, texLoader) {
             console.log("objectpool is empty");
         }
         var singleCloud = cloudObjectPool.TakeFromPool();
-        var startPosition = this.model.position;
+        var startPosition = this.collider.position;
         var direction = new THREE.Vector3();
-        this.model.getWorldDirection(direction);
+        this.collider.getWorldDirection(direction);
         startPosition = new THREE.Vector3(startPosition.x + direction.x * 0.8, startPosition.y + 1.5, startPosition.z + direction.z * 0.8);
 
         singleCloud.ResetAnimation(startPosition);
@@ -177,7 +196,6 @@ function Boat(scene, modelLoader, texLoader) {
             if(Clouds[i]){
                 Clouds[i].AnimateCloud();
         
-                console.log(Clouds[i].CheckOpacity());
                 if(Clouds[i].CheckOpacity() <= 0){
                     cloudObjectPool.ReturnToPool(Clouds[i]);
                     Clouds.shift();
@@ -187,7 +205,7 @@ function Boat(scene, modelLoader, texLoader) {
 
         cloudclock += 0.005;
 
-        if(cloudclock >= 1){
+        if(cloudclock >= 0.5){
             if(this.model){
             this.GenerateCloud();
             }

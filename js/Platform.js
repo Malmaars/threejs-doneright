@@ -76,8 +76,8 @@ function Platform(scene, modelLoader, texLoader, location, boatReference, link) 
         var currentlyPressedKey;
 
         this.Update = function(){
-            if(boatReference.model && this.model && extension){
-                if(boatReference.model.position.distanceTo(this.model.position) < 3){
+            if(boatReference.collider && this.model && extension){
+                if(boatReference.collider.position.distanceTo(this.model.position) < 3){
                     extension.position.set(location.x, location.y + 1, location.z);
 
                     if(currentlyPressedKey == 13){
