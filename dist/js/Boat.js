@@ -51,6 +51,7 @@ function Boat(scene, modelLoader, texLoader, engine) {
     var boatBox = Matter.Bodies.fromVertices(0,0,verticesforBoat);
     // var boatBox = Matter.Bodies.rectangle(0, 0, 30, 10);
     Matter.Composite.add(engine.world, boatBox);
+    Matter.Body.setDensity(boatBox, 0.1);
 
     //load in the boat, from reference in the resource folder.
     modelLoader.load
@@ -105,14 +106,14 @@ function Boat(scene, modelLoader, texLoader, engine) {
             // physicsBody.AddVelocity(velocity);
             // this.collider.rotateY(rotationOffset);
 
-            boatBox.torque = -rotationOffset / 700;
+            boatBox.torque = -rotationOffset * boatBox.density;
             // Matter.Body.rotate(boatBox,-rotationOffset);
             console.log(boatBox.angle);
             this.collider.rotation.set(0,-boatBox.angle + Math.PI/2, 0);
 
             // console.log(moveDirection.z * -positionOffset / 10000);
             // console.log(boatBox.velocity);
-            Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset / 100, y: Math.sin(boatBox.angle) * -positionOffset / 100});
+            Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset * boatBox.mass / 10, y: Math.sin(boatBox.angle) * -positionOffset * boatBox.mass / 10});
 
 
             this.collider.position.set(boatBox.position.x / 10, this.collider.position.y, boatBox.position.y / 10);
