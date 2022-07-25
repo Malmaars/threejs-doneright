@@ -151,7 +151,7 @@ var Uppersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg'
 var Lowersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(15, -1, -15),
+    new Island(camera ,scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(15, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     "HEAD OFF",
     ['Head off is a small game made to try out making',
@@ -161,7 +161,7 @@ const islands = [
      'nonetheless.'],
      "https://smos-bois.itch.io/head-off"),
 
-     new Island(scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(-15, -1, -15),
+     new Island(camera,scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(-15, -1, -15),
       "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
       "Knowhere Express",
      ['Knowhere Express was my submission to the Global',
@@ -243,10 +243,10 @@ function onDocumentKeyUp(event) {
 
 const clock = new THREE.Clock();
 
-const mouse = new Mouse(camera);
+const mouse = new Mouse(camera, scene);
 
 onpointerdown = (event) => {
-    mouse.PointerDownEvent();
+    mouse.PointerDownEvent(event);
     boat.PointerDownEvent();
 }
 onpointermove = (event) => {
@@ -262,7 +262,6 @@ onpointerup = (event) => {
 //this updates frames.
 const tick = () => {
     var delta = clock.getDelta();
-    console.log(clock.getDelta());
 
     if(initialized == true){
     physicsManager.Update();
