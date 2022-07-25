@@ -105,22 +105,15 @@ function Boat(scene, modelLoader, texLoader, engine) {
             //We don't do a usual clamp, because that would result eventually in moving only in degrees of 90.
             velocity.clampLength(-0.01, 0.01);
 
-            // physicsBody.AddVelocity(velocity);
-            // this.collider.rotateY(rotationOffset);
 
-            console.log(deltaTime);
             boatBox.torque = -rotationOffset * boatBox.density * deltaTime * 150;
-            // Matter.Body.rotate(boatBox,-rotationOffset);
-            console.log(boatBox.angle);
             this.collider.rotation.set(0,-boatBox.angle + Math.PI/2, 0);
 
-            // console.log(moveDirection.z * -positionOffset / 10000);
-            // console.log(boatBox.velocity);
             Matter.Body.applyForce(boatBox, boatBox.position, {x: Math.cos(boatBox.angle) * -positionOffset * boatBox.mass * deltaTime * speed, y: Math.sin(boatBox.angle) * -positionOffset * boatBox.mass * deltaTime * speed});
 
 
             this.collider.position.set(boatBox.position.x / 10, this.collider.position.y, boatBox.position.y / 10);
-            //console.log(moveDirection);
+
         }
     }
 

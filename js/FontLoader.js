@@ -1,6 +1,3 @@
-import { Font } from '../extras/core/Font';
-import { FileLoader } from './FileLoader';
-import { DefaultLoadingManager } from './LoadingManager';
 
 /**
  * @author mrdoob / http://mrdoob.com/

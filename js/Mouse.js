@@ -1,4 +1,4 @@
-function Mouse(_camera)
+function Mouse(_camera, scene)
 {
     var camera = _camera;
     var movingBoolean;
@@ -20,6 +20,9 @@ function Mouse(_camera)
         }
     }
 
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
     this.PointerMoveEvent = function (event) 
     {
         if(movingBoolean == true){
@@ -32,14 +35,30 @@ function Mouse(_camera)
         camera.position.set(previousCameraPos.x + offset.x * 0.03, previousCameraPos.y, previousCameraPos.z + offset.z * 0.03);
         // console.log(camera.position);
         }
+                // console.log("Mouse");
+        pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+        raycaster.setFromCamera( pointer, camera )
+        const intersects = raycaster.intersectObjects( scene.children, true );
+                
+        for ( let i = 0; i < intersects.length; i ++ ) {
+    
+            if(intersects[i].object.name == 'interactible'){
+                console.log("can interact");
+            }
+    
+        }
+
+        //cast a ray to check if it's in range of any clickables
         previousMousePosition = new THREE.Vector3(event.screenX, 0, event.screenY);
+
     }
 
-    this.PointerDownEvent = function() 
+    this.PointerDownEvent = function(event) 
     { 
         movingBoolean = true;
         previousCameraPos = camera.position;
-        // console.log("Mouse");
 
     };
     this.PointerUpEvent = function()
