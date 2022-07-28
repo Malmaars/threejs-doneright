@@ -126,6 +126,14 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
             return true;
         }
 
+        
+        const clock = new THREE.Clock();
+        this.AnimatePlatformExtension = function(newLocation, speed){
+            var delta = clock.getDelta();
+            extension.position.lerp(newLocation, delta * speed);
+        }
+
+        var extensionPositionSet = false;
         this.Update = function(){
             if(this.model && textMesh1 && textMesh2){
             this.model.position.set(camera.position.x, camera.position.y - 8, camera.position.z + 8);
@@ -133,7 +141,25 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
             this.collider.position.set(this.model.position.x, this.model.position.y, this.model.position.z);
             textMesh1.position.set(camera.position.x + 1.65, camera.position.y - 8, camera.position.z + 7.7);
             textMesh2.position.set(camera.position.x + 1.25, camera.position.y - 8, camera.position.z + 7.7);
+            if(extensionPositionSet == false && extension){
+                extension.position.set(this.model.position.x, this.model.position.y - 0.6, this.model.position.z);
+                extension.rotation.set(0,Math.PI/2,0);
+                extensionPositionSet = true;
+            }
 
+            if(extension){
+                console.log(extension.position);
+            }
+
+            if(extensionPositionSet != false){
+                if(mouse.linkHover == 'Start'){
+                    this.AnimatePlatformExtension(new THREE.Vector3(this.model.position.x, this.model.position.y + 1, this.model.position.z), 6);
+                }
+                else{   
+                    this.AnimatePlatformExtension(new THREE.Vector3(this.model.position.x, this.model.position.y - 0.6, this.model.position.z), 12);
+                }
+            }
+            
             if(mouse.startGame == true){
                 this.Initialize();
             }

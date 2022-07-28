@@ -142,7 +142,7 @@ const mouse = new Mouse(camera, scene);
 
 const loadingscreen = new LoadingScreen(loadingManager, scene, texLoader, modelLoader,fontLoader, mouse, camera);
 var loadingSea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 991.5, 0.5);
-var loadingSeaLower = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 991, 1);
+var loadingSeaLower = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 991.4, 1);
 
 
 
