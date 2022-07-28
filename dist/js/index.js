@@ -2,35 +2,28 @@
 //git commit -m "name of commit"
 //git push origin master
 //npm run deploy
-
 var initialized = false;
 //loading
 const loadingManager = new THREE.LoadingManager()
+
 loadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
 	console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    camera.position.set(0,1000,0);
     //mmdLoader.createHelper();
 };
 
 loadingManager.onLoad = function ( ) {
 
 	console.log( 'Loading complete!');
-    console.log('Initializing');   
-    for (let i = 0; i < islands.length; i++){
-        islands[i].Initialize();
-    }
 
-    for (let i = 0; i < decoratives.length; i++){
-        decoratives[i].Initialize();
-    }
-    boat.Initialize();
-    initialized = true;
+    loadingscreen.OnLoad();
 };
 
 
 loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
 
-	console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+	//console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
 
 };
 
@@ -56,7 +49,6 @@ Runner.run(runner, engine);
 
 
 
-
 //const normalTexture = textureLoader.load('/textures/SmallBricks.jpg')
 
 // Canvas
@@ -69,6 +61,22 @@ const scene = new THREE.Scene()
 const geometry = new THREE.BoxGeometry(1, 32, 16);
 
 // Lights
+
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+const modelLoader = new THREE.FBXLoader(loadingManager);
+const texLoader = new THREE.TextureLoader(loadingManager);
+const fontLoader = new THREE.FontLoader(loadingManager);
+
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.rotation.x = 50 * Math.PI/180;
+camera.rotation.y = Math.PI;
+camera.focus = 20;
+scene.add(camera)
+
 
 //direction light 1
 const dirLight1 = new THREE.DirectionalLight(0x404040, 1); // soft white light
@@ -86,14 +94,6 @@ scene.add(dirLight1);
 const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
 ambientLight.intensity = 3;
 scene.add(ambientLight);
-
-/**
- * Sizes
- */
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
 
 window.addEventListener('resize', () => {    
     // Update sizes
@@ -113,11 +113,7 @@ window.addEventListener('resize', () => {
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.rotation.x = 50 * Math.PI/180;
-camera.rotation.y = Math.PI;
-camera.focus = 20;
-scene.add(camera)
+
 
 function UpdateCameraPos()
 {
@@ -142,16 +138,20 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 const physicsManager = new PhysicsManager();
 
-const modelLoader = new THREE.FBXLoader(loadingManager);
-const texLoader = new THREE.TextureLoader(loadingManager);
-const fontLoader = new THREE.FontLoader(loadingManager);
+const mouse = new Mouse(camera, scene);
+
+const loadingscreen = new LoadingScreen(loadingManager, scene, texLoader, modelLoader,fontLoader, mouse, camera);
+var loadingSea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 991.5, 0.5);
+var loadingSeaLower = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 991, 1);
+
+
 
 var boat = new Boat(scene, modelLoader, texLoader, engine);
 var Uppersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -0.6, 0.5);
 var Lowersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(camera ,scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(15, -1, -15),
+    new Island(camera ,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(15, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     "HEAD OFF",
     ['Head off is a small game made to try out making',
@@ -161,7 +161,7 @@ const islands = [
      'nonetheless.'],
      "https://smos-bois.itch.io/head-off"),
 
-     new Island(camera,scene, fontLoader, modelLoader, texLoader, engine, boat, new THREE.Vector3(-15, -1, -15),
+     new Island(camera,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(-15, -1, -15),
       "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
       "Knowhere Express",
      ['Knowhere Express was my submission to the Global',
@@ -243,7 +243,6 @@ function onDocumentKeyUp(event) {
 
 const clock = new THREE.Clock();
 
-const mouse = new Mouse(camera, scene);
 
 onpointerdown = (event) => {
     mouse.PointerDownEvent(event);
@@ -264,23 +263,38 @@ const tick = () => {
     var delta = clock.getDelta();
 
     if(initialized == true){
-    physicsManager.Update();
+            // Update objects
+        boat.Update(posOffset, rotOffset, delta);
+
+        mouse.UpdateCamera();
+        boat.UpdateCameraPos(camera, currentlyPressedKey);
+
+        for (let i = 0; i < islands.length; i++){
+            islands[i].Update();
+        }
+
+        for (let i = 0; i < decoratives.length; i++){
+            decoratives[i].Update();
+        }
+
+        boat.animate(clock);
     }
-    // Update objects
-    boat.Update(posOffset, rotOffset, delta);
+    else{
+        loadingscreen.Update();
 
-    mouse.UpdateCamera();
-    boat.UpdateCameraPos(camera, currentlyPressedKey);
-
-    for (let i = 0; i < islands.length; i++){
-        islands[i].Update();
+        if(loadingscreen.initialized == true){
+            console.log('Initializing');   
+            for (let i = 0; i < islands.length; i++){
+                islands[i].Initialize();
+            }
+        
+            for (let i = 0; i < decoratives.length; i++){
+                decoratives[i].Initialize();
+            }
+            boat.Initialize(camera);
+            initialized = true;
+        }
     }
-
-    for (let i = 0; i < decoratives.length; i++){
-        decoratives[i].Update();
-    }
-
-    boat.animate(clock);
 
     // Update Orbital Controls
     // controls.update()

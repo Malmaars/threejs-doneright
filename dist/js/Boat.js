@@ -157,11 +157,13 @@ function Boat(scene, modelLoader, texLoader, engine) {
     }
 
     var Clouds = [];
-    this.Initialize = function(){
+    this.Initialize = function(camera){
         //this.GenerateCloud();
         this.model.position.set(-0.08,-0.5,0);
         this.collider.rotateY(Math.PI/2);   
         this.collider.position.set(0,0.6,0);
+
+        camera.position.set(this.collider.position.x, this.collider.position.y + 10, this.collider.position.z - 10);
     }
 
     this.GenerateCloud = function(){

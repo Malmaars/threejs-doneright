@@ -1,4 +1,4 @@
-function Platform(_camera, scene, modelLoader, texLoader, location, boatReference, link) {
+function Platform(_camera, scene, modelLoader, texLoader, location, boatReference, mouseRef, link) {
 
     var geometry = new THREE.BoxGeometry( 6, 1, 3 );
 
@@ -125,14 +125,14 @@ function Platform(_camera, scene, modelLoader, texLoader, location, boatReferenc
 
             this.collider.position.set(location.x, location.y, location.z);
             this.collider.renderOrder = 1;
-            this.collider.name = 'interactible';
+            this.collider.name = link;
         }
 
         var currentlyPressedKey;
 
         this.Update = function(){
             if(boatReference.collider && this.model && extension){
-                if(boatReference.collider.position.distanceTo(this.model.position) < 3){
+                if(boatReference.collider.position.distanceTo(this.model.position) < 3 || mouseRef.linkHover == link){
                     
                     //extension.position.set(location.x, location.y + 1, location.z);
                     this.AnimatePlatformExtension(new THREE.Vector3(location.x, location.y + 1, location.z), 6);
@@ -155,17 +155,6 @@ function Platform(_camera, scene, modelLoader, texLoader, location, boatReferenc
 
         this.OnButtonUp = function(event){
             currentlyPressedKey = null;
-        }
-
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
-        onpointerover = (event) => {
-            console.log("Pointerover");
-            pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    
-            raycaster.setFromCamera( pointer, _camera )
-            const intersects = raycaster.intersectObjects( scene.children, true );
         }
 
         const clock = new THREE.Clock();
