@@ -2,6 +2,7 @@
 //git commit -m "name of commit"
 //git push origin master
 //npm run deploy
+
 var initialized = false;
 //loading
 const loadingManager = new THREE.LoadingManager()
