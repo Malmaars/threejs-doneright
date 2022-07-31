@@ -23,10 +23,10 @@ function Sea(scene, textureLoader, path, height, opacity) {
     material.opacity = opacity;
     
 
-    const sea = new THREE.Mesh(seaGeometry, material)
+    this.model = new THREE.Mesh(seaGeometry, material);
 
-    scene.add(sea);
+    scene.add(this.model);
 
     //I set the sea a little lower, so the boat can stay on 0 y position
-    sea.position.set(0, height, 0);
+    this.model.position.set(0, height, 0);
 }

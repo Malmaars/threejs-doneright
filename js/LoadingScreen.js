@@ -11,6 +11,8 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
         this.collider.renderOrder = 1;
 
 
+        //const loadingSea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 850, 0.5);
+        const lowerLoadingSea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 850, 1);
         var platformMaterial;
 
         texLoader.load(
@@ -45,7 +47,7 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
                     if (child.isMesh) {
                         platformMaterial.metalness = 0;
                         platformMaterial.transparent = true;
-                        platformMaterial.opacity = 1;
+                        platformMaterial.opacity = 0.2;
                         child.material = platformMaterial;
                         
                     }
@@ -87,6 +89,24 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
                 textMesh2.rotation.x = Math.PI * 0.5;
                 textMesh2.rotation.y = Math.PI * 1;
                 scene.add(textMesh2);
+            } );
+
+            var detailGeometry;
+            var textMesh3;
+            fontLoader.load( 'https://unpkg.com/three@0.77.0/examples/fonts/helvetiker_bold.typeface.json', function ( font ) {
+                detailGeometry = new THREE.TextGeometry( 'this site is a work in progress.', {
+                font: font,
+                size: 120,
+                height: 5,
+                curveSegments: 12,
+                } );
+                var material = new THREE.MeshStandardMaterial();
+                material.metalness = 0;
+                textMesh3 = new THREE.Mesh( detailGeometry, material);
+                textMesh3.scale.set(0.004,0.004,0.004);
+                textMesh3.rotation.x = Math.PI * 0.5;
+                textMesh3.rotation.y = Math.PI * 1;
+                scene.add(textMesh3);
             } );
 
     var extension;
@@ -135,20 +155,22 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
 
         var extensionPositionSet = false;
         this.Update = function(){
-            if(this.model && textMesh1 && textMesh2){
-            this.model.position.set(camera.position.x, camera.position.y - 8, camera.position.z + 8);
+
+            var offset = (window.innerWidth) / 200;
+            if(this.model && textMesh1 && textMesh2 && textMesh3 && lowerLoadingSea.model){
+            this.model.position.set(camera.position.x, camera.position.y - 20 + offset, camera.position.z + 20 - offset);
             this.model.rotation.set(0, Math.PI/2, 0);
             this.collider.position.set(this.model.position.x, this.model.position.y, this.model.position.z);
-            textMesh1.position.set(camera.position.x + 1.65, camera.position.y - 8, camera.position.z + 7.7);
-            textMesh2.position.set(camera.position.x + 1.25, camera.position.y - 8, camera.position.z + 7.7);
+            textMesh1.position.set(this.model.position.x + 1.65, this.model.position.y, this.model.position.z - 0.3);
+            textMesh2.position.set(this.model.position.x + 1.25, this.model.position.y, this.model.position.z - 0.3);
+            textMesh3.position.set(this.model.position.x + 4.5, this.model.position.y, this.model.position.z - 4);
+            //loadingSea.model.position.set(this.model.position.x, this.model.position.y - 0.5, this.model.position.z)
+            lowerLoadingSea.model.position.set(this.model.position.x, this.model.position.y - 0.5, this.model.position.z)
+
             if(extensionPositionSet == false && extension){
                 extension.position.set(this.model.position.x, this.model.position.y - 0.6, this.model.position.z);
                 extension.rotation.set(0,Math.PI/2,0);
                 extensionPositionSet = true;
-            }
-
-            if(extension){
-                console.log(extension.position);
             }
 
             if(extensionPositionSet != false){
@@ -158,6 +180,7 @@ function LoadingScreen(loadingManager, scene, texLoader, modelLoader, fontLoader
                 else{   
                     this.AnimatePlatformExtension(new THREE.Vector3(this.model.position.x, this.model.position.y - 0.6, this.model.position.z), 12);
                 }
+                extension.position.set(this.model.position.x, extension.position.y, this.model.position.z);
             }
             
             if(mouse.startGame == true){
