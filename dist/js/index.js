@@ -31,6 +31,8 @@ loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
 loadingManager.onError = function ( url ) {
 
 	console.log( 'There was an error loading ' + url );
+    window.location.reload();
+    
 
 };
 
