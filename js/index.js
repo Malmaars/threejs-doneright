@@ -248,16 +248,19 @@ const clock = new THREE.Clock();
 
 
 addEventListener('touchstart', (event) => {
+    boat.PointerDownEvent();
     mouse.TouchDown(event);
 });
 
 addEventListener('touchmove', (event) => {
-    console.log("noticing touch");
+    //console.log("noticing touch");
+    boat.PointerMoveEvent();
     mouse.TouchMoveEvent(event);
 });
 
 addEventListener('touchend', (event) => {
     mouse.TouchUp(event);
+    boat.PointerUpEvent();
 });
 
 onmousedown = (event) => {

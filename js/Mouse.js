@@ -5,6 +5,7 @@ function Mouse(_camera, scene)
     var movingBoolean;
     var previousCameraPos;
     var previousMousePosition;
+    var previousTouchPosition = new THREE.Vector3(0,0,0);
 
     this.linkHover;
     this.startGame = false;
@@ -63,24 +64,23 @@ function Mouse(_camera, scene)
 
     this.TouchMoveEvent = function (event) 
     {
-        console.log(event.touches[0].screenX);
+        console.log(event.touches);
         document.body.style.cursor = "grab";
         if(movingBoolean == true){
             document.body.style.cursor = "grabbing";
             // console.log("Updating camera");
-        var offset = new THREE.Vector3( event.touches[0].screenX - previousMousePosition.x, 0, event.touches[0].screenY - previousMousePosition.z);
+        var offset = new THREE.Vector3( event.touches[0].screenX - previousTouchPosition.x, 0, event.touches[0].screenY - previousTouchPosition.z);
 
         offset.clampLength(-15,15);
         velocity.set(offset.x * 0.03, 0, offset.z * 0.03);
 
-        // console.log(offset);
         camera.position.set(previousCameraPos.x + offset.x * 0.03, previousCameraPos.y, previousCameraPos.z + offset.z * 0.03);
         // console.log(camera.position);
         }
 
         
-        pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        pointer.x = ( event.touches[0].clientX / window.innerWidth ) * 2 - 1;
+        pointer.y = - ( event.touches[0].clientY / window.innerHeight ) * 2 + 1;
 
         raycaster.setFromCamera( pointer, camera )
         const intersects = raycaster.intersectObjects( scene.children, true );
@@ -111,8 +111,8 @@ function Mouse(_camera, scene)
         }
                 // console.log("Mouse");
         //cast a ray to check if it's in range of any clickables
-        previousMousePosition = new THREE.Vector3(event.touches[0].screenX, 0, event.touches[0].screenY);
-    }
+        previousTouchPosition = new THREE.Vector3(event.touches[0].screenX, 0, event.touches[0].screenY);
+        }
 
     this.TouchUp = function(event){
         touchControls = false;
@@ -131,7 +131,6 @@ function Mouse(_camera, scene)
         offset.clampLength(-15,15);
         velocity.set(offset.x * 0.03, 0, offset.z * 0.03);
 
-        // console.log(offset);
         camera.position.set(previousCameraPos.x + offset.x * 0.03, previousCameraPos.y, previousCameraPos.z + offset.z * 0.03);
         // console.log(camera.position);
         }
@@ -176,6 +175,7 @@ function Mouse(_camera, scene)
 
     this.PointerDownEvent = function(event) 
     { 
+        if(touchControls == false){
         movingBoolean = true;
         previousCameraPos = camera.position;
 
@@ -204,6 +204,7 @@ function Mouse(_camera, scene)
                 this.startGame = true;
             }
         }
+    }
     };
     
     this.PointerUpEvent = function()
