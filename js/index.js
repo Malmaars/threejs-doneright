@@ -247,20 +247,26 @@ function onDocumentKeyUp(event) {
 const clock = new THREE.Clock();
 
 
-onpointerdown = (event) => {
+
+onmousedown = (event) => {
     mouse.PointerDownEvent(event);
     boat.PointerDownEvent();
 }
-onpointermove = (event) => {
+onmousemove = (event) => {
     boat.PointerMoveEvent();
     mouse.PointerMoveEvent(event);
 }
-onpointerup = (event) => {
+
+addEventListener('touchmove', (event) => {
+    console.log("noticing touch");
+    mouse.TouchMoveEvent(event);
+});
+
+onmouseup = (event) => {
     mouse.PointerUpEvent();
     boat.PointerUpEvent();
     
 }
-
 //this updates frames.
 const tick = () => {
     var delta = clock.getDelta();
