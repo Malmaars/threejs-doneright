@@ -247,6 +247,18 @@ function onDocumentKeyUp(event) {
 const clock = new THREE.Clock();
 
 
+addEventListener('touchstart', (event) => {
+    mouse.TouchDown(event);
+});
+
+addEventListener('touchmove', (event) => {
+    console.log("noticing touch");
+    mouse.TouchMoveEvent(event);
+});
+
+addEventListener('touchend', (event) => {
+    mouse.TouchUp(event);
+});
 
 onmousedown = (event) => {
     mouse.PointerDownEvent(event);
@@ -257,10 +269,6 @@ onmousemove = (event) => {
     mouse.PointerMoveEvent(event);
 }
 
-addEventListener('touchmove', (event) => {
-    console.log("noticing touch");
-    mouse.TouchMoveEvent(event);
-});
 
 onmouseup = (event) => {
     mouse.PointerUpEvent();
