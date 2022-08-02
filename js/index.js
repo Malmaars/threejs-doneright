@@ -265,6 +265,25 @@ let bckButton = document.getElementById('backButton');
 bckButton.addEventListener('touchstart', MoveBackward);
 bckButton.addEventListener('touchend', StopMoving);
 
+var startphoneMoveLoc;
+var phoneMoveDir = 0;
+
+let leftButton = document.getElementById('leftButton');
+leftButton.addEventListener('touchstart', turnBoat(1));
+leftButton.addEventListener('touchend', stopRotation);
+
+let rightButton = document.getElementById('rightButton');
+rightButton.addEventListener('touchstart', turnBoat(-1));
+rightButton.addEventListener('touchend', stopRotation);
+
+
+function turnBoat(direction){
+    rotOffset = rotSpeed * direction;
+}
+
+function stopRotation(){
+    rotOffset = 0;
+}
 //input to check wether the player lets go of certain keys to let them stop moving
 //I might have to change this to detect stopping movement better
 document.addEventListener("keyup", onDocumentKeyUp, false);

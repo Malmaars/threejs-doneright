@@ -9,6 +9,8 @@ function Mouse(_camera, scene)
 
     this.linkHover;
     this.startGame = false;
+
+    this.panIsAllowed = true;
     
     var velocity = new THREE.Vector3(0,0,0);
 
@@ -64,6 +66,7 @@ function Mouse(_camera, scene)
 
     this.TouchMoveEvent = function (event) 
     {
+        if(this.panIsAllowed == true){
         document.body.style.cursor = "grab";
         if(movingBoolean == true){
             document.body.style.cursor = "grabbing";
@@ -108,6 +111,7 @@ function Mouse(_camera, scene)
         if(none == true){
             this.linkHover = null;
         }
+    }
                 // console.log("Mouse");
         //cast a ray to check if it's in range of any clickables
         previousTouchPosition = new THREE.Vector3(event.touches[0].screenX, 0, event.touches[0].screenY);
