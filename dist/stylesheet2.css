@@ -36,22 +36,35 @@ h1 {
 
   h3 {
     position: absolute;
-    top: calc(50% - 75px);
-    left: calc(50% - 75px);
-    width: 150px;
-    height: 150px;
+    top: calc(50%);
+    left: calc(50% - 80px);
+    width: 80px;
+    height: 120px;
     border: 2px solid rgb(255, 255, 255);
-    border-radius: 50%;
-    opacity: 0.25;
-    pointer-events: none;
+    border-radius: 10px;
     box-sizing: border-box;
+    opacity: 0.25;
+    will-change: opacity;
   }
+
+  h4{
+    position: absolute;
+    top: calc(50% - 3px);
+    left: calc(50% + 10px);
+    width: 80px;
+    height: 120px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 10px;
+    box-sizing: border-box;
+    opacity: 0.25;
+    will-change: opacity;
+}
 
 .ButtonLayout {
     user-select: none;
     position: fixed;
-    bottom: calc(100px);
-    right: 0px;
+    bottom: calc(60px);
+    right: 20px;
     width: 95px;
     height: 70px;
     transition: opacity 0.3s ease 0.4s;
@@ -62,7 +75,7 @@ h1 {
 .ControllerLayout{
     user-select: none;
     position: fixed;
-    bottom: 30px;
+    bottom: 100px;
     left: 10px;
     width: 170px;
     height: 170px;
@@ -70,18 +83,4 @@ h1 {
     transition: opacity 0.3s ease 0s;
     will-change: opacity;
     opacity: 1;
-}
-
-h4{
-    position: absolute;
-    top: calc(50% - 30px);
-    left: calc(50% - 30px);
-    width: 60px;
-    height: 60px;
-    border: 2px solid rgb(255, 255, 255);
-    border-radius: 50%;
-    box-sizing: border-box;
-    pointer-events: none;
-    will-change: transform;
-    transform: translateX(0px) translateY(0px);
 }
