@@ -1,4 +1,4 @@
-function Decoratives(scene, modelLoader, texLoader, engine, modelPath, texPath, location, kinematic, colliderSize, modelOffset){
+function Decoratives(scene, modelLoader, texLoader, engine, modelPath, texPath, location, kinematic, colliderSize, modelOffset, rotationY, rotationX, scale){
     
     var geometry = new THREE.BoxGeometry( colliderSize.x, colliderSize.y, colliderSize.z );
 
@@ -54,12 +54,14 @@ function Decoratives(scene, modelLoader, texLoader, engine, modelPath, texPath, 
 
         this.Initialize = function(){
             this.model.position.set(modelOffset.x, modelOffset.y, modelOffset.z);
-
+            this.model.rotateY(rotationY);
+            this.model.rotateX(rotationX);
+            this.model.scale.set(scale, scale,scale);
             // this.collider.position.set(location.x, location.y, location.z);
         }
 
         this.Update = function(){
-            this.collider.position.set(decoBox.position.x/10, this.collider.position.y, decoBox.position.y/10);
+            this.collider.position.set(decoBox.position.x/10, location.y, decoBox.position.y/10);
             this.collider.rotation.set(0,-decoBox.angle + Math.PI, 0);
         }
 }

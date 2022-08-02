@@ -160,8 +160,6 @@ renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-const physicsManager = new PhysicsManager();
-
 const mouse = new Mouse(camera, scene);
 
 // var loadingSea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', 850, 0.5);
@@ -175,7 +173,7 @@ var Uppersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg'
 var Lowersea = new Sea(scene, texLoader, 'resources/textures/Sea/WaterBlank.jpg', -1, 1);
  
 const islands = [
-    new Island(camera ,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(15, -1, -15),
+    new Island(camera ,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(-45, -1, -15),
     "resources/textures/Billboards/Billboard_V2_HeadOff.png", 
     "HEAD OFF",
     ['Head off is a small game made to try out making',
@@ -185,7 +183,7 @@ const islands = [
      'nonetheless.'],
      "https://smos-bois.itch.io/head-off"),
 
-     new Island(camera,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(-15, -1, -15),
+     new Island(camera,scene, fontLoader, modelLoader, texLoader, engine, boat, mouse, new THREE.Vector3(-25, -1, -15),
       "resources/textures/Billboards/Billboard_V2_KnowhereExpress.png", 
       "Knowhere Express",
      ['Knowhere Express was my submission to the Global',
@@ -197,8 +195,52 @@ const islands = [
       "https://mirnavsteenbergen.itch.io/the-knowhere-express"),
 ]
 
-const decoratives = [
-    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyW.fbx', 'resources/textures/KeyW.png', new THREE.Vector3(10,-0.2,0), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0))
+var PCdecoratives;
+if(onMobile == false){
+PCdecoratives = [
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyArrow.fbx', 'resources/textures/KeyArrow.png', new THREE.Vector3(-10.5,-0.2,0), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0), 0,0, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyArrow.fbx', 'resources/textures/KeyArrow.png', new THREE.Vector3(-10.5,-0.2, -1.5), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0), Math.PI,0, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyArrow.fbx', 'resources/textures/KeyArrow.png', new THREE.Vector3(-9,-0.2,-1.5), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0), Math.PI/2,0, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/KeyArrow.fbx', 'resources/textures/KeyArrow.png', new THREE.Vector3(-12,-0.2,-1.5), false, new THREE.Vector3(1,0.4,1), new THREE.Vector3(0,0,0), Math.PI*1.5,0, 1),
+];
+const PCdecoTexts = [
+    new DecoText(scene, 'Use your', fontLoader, new THREE.Vector3(-5,-0.2,-0.5), 200, Math.PI/2, new THREE.Vector3(0,0,100), 5),
+    new DecoText(scene, 'keys', fontLoader, new THREE.Vector3(-11.5,-0.2,-0.5), 200, Math.PI/2, new THREE.Vector3(0,0,100), 5),
+    new DecoText(scene, 'to move around', fontLoader, new THREE.Vector3(-5.5,-0.2,-3), 200, Math.PI/2, new THREE.Vector3(0,0,100), 5)
+];
+}
+
+else{
+    var MobiledecoTexts = [
+        new DecoText(scene, 'Use the controls', fontLoader, new THREE.Vector3(-5,-0.2,-0.5), 200, Math.PI/2, new THREE.Vector3(0,0,100), 5),
+        new DecoText(scene, 'to move around', fontLoader, new THREE.Vector3(-5.5,-0.2,-3), 200, Math.PI/2, new THREE.Vector3(0,0,100), 5)
+    ]   
+}
+
+const permaDecos = [
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/directionBuoy.fbx', 'resources/textures/DirectionBuoy.png', new THREE.Vector3(0,-0.2,-20), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,0, 0.5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/S.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(6.3,-0.1,-5), false, new THREE.Vector3(0.8,2,1.3), new THREE.Vector3(0,0,0),0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/I.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(5.5,-0.1,-5), false, new THREE.Vector3(0.2,2,1.3), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/M.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(4.6,-0.1,-5), false, new THREE.Vector3(1.2,2,1.3), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/O.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(3.5,-0.1,-5), false, new THREE.Vector3(0.6,2,1.3), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/N.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(2.5,-0.1,-5), false, new THREE.Vector3(1,2,1.3), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/D.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(0.5,-0.1,-5), false, new THREE.Vector3(0.5,2,1.3), new THREE.Vector3(0,0,0),0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/E.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-0.5,-0.1,-5), false, new THREE.Vector3(0.5,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/B.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-2.5,-0.1,-5), false, new THREE.Vector3(0.8,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/R.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-3.5,-0.1,-5), false, new THREE.Vector3(0.8,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/U.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-4.5,-0.1,-5), false, new THREE.Vector3(0.5,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/I.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-5.3,-0.1,-5), false, new THREE.Vector3(0.2,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/J.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-6,-0.1,-5), false, new THREE.Vector3(0.7,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/N.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-7,-0.1,-5), false, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/E.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-8,-0.1,-5), false, new THREE.Vector3(0.5,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+
+]
+
+const permaDecoTexts = [
+    new DecoText(scene, 'Projects ->', fontLoader, new THREE.Vector3(-1,-0.2,-20.2), 120, Math.PI/2, new THREE.Vector3(0,0,100), 5),
+    new DecoText(scene, '<- About Me', fontLoader, new THREE.Vector3(4.8,-0.2,-20.2), 120, Math.PI/2, new THREE.Vector3(0,0,100), 5),
+    new DecoText(scene, 'projects', fontLoader, new THREE.Vector3(-0.25,2.6,-20.1), 60, 0, new THREE.Vector3(0,0,0), 1),
+    new DecoText(scene, 'me', fontLoader, new THREE.Vector3(1.1,2.6,-20.1), 60, 0, new THREE.Vector3(0,0,0), 1),
 ]
 
 
@@ -388,9 +430,14 @@ const tick = () => {
             islands[i].Update();
         }
 
-        for (let i = 0; i < decoratives.length; i++){
-            decoratives[i].Update();
+        if(onMobile == false){
+        for (let i = 0; i < PCdecoratives.length; i++){
+            PCdecoratives[i].Update();
         }
+    }
+    for (let i = 0; i < permaDecos.length; i++){
+        permaDecos[i].Update();
+    }
 
         boat.animate(clock);
     }
@@ -403,9 +450,14 @@ const tick = () => {
                 islands[i].Initialize();
             }
         
-            for (let i = 0; i < decoratives.length; i++){
-                decoratives[i].Initialize();
+            if(onMobile == false){
+            for (let i = 0; i < PCdecoratives.length; i++){
+                PCdecoratives[i].Initialize();
             }
+        }
+        for (let i = 0; i < permaDecos.length; i++){
+            permaDecos[i].Initialize();
+        }
             boat.Initialize(camera);
             initialized = true;
         }
