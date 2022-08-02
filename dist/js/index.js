@@ -269,16 +269,20 @@ var startphoneMoveLoc;
 var phoneMoveDir = 0;
 
 let leftButton = document.getElementById('leftButton');
-leftButton.addEventListener('touchstart', turnBoat(1));
+leftButton.addEventListener('touchstart', turnBoatLeft);
 leftButton.addEventListener('touchend', stopRotation);
 
 let rightButton = document.getElementById('rightButton');
-rightButton.addEventListener('touchstart', turnBoat(-1));
+rightButton.addEventListener('touchstart', turnBoatRight);
 rightButton.addEventListener('touchend', stopRotation);
 
 
-function turnBoat(direction){
-    rotOffset = rotSpeed * direction;
+function turnBoatLeft(){
+    rotOffset = rotSpeed;
+}
+
+function turnBoatRight(){
+    rotOffset = -rotSpeed;
 }
 
 function stopRotation(){
