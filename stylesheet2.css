@@ -14,10 +14,10 @@ h1 {
     left: calc(50% - 30px);
     width: 60px;
     height: 60px;
-    border: 2px solid rgb(255, 0, 0);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 10px;
     box-sizing: border-box;
-    opacity: 0;
+    opacity: 0.25;
     will-change: opacity;
   }
 
@@ -27,10 +27,10 @@ h1 {
     left: calc(50% - 30px);
     width: 60px;
     height: 60px;
-    border: 2px solid rgb(255, 0, 0);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 10px;
     box-sizing: border-box;
-    opacity: 0;
+    opacity: 0.25;
     will-change: opacity;
   }
 
@@ -40,9 +40,9 @@ h1 {
     left: calc(50% - 75px);
     width: 150px;
     height: 150px;
-    border: 2px solid rgb(255, 0, 0);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 50%;
-    opacity: 0;
+    opacity: 0.25;
     pointer-events: none;
     box-sizing: border-box;
   }
@@ -78,11 +78,10 @@ h4{
     left: calc(50% - 30px);
     width: 60px;
     height: 60px;
-    border: 2px solid rgb(255, 0, 0);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 50%;
     box-sizing: border-box;
     pointer-events: none;
     will-change: transform;
     transform: translateX(0px) translateY(0px);
-    opacity: 0;
 }

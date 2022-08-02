@@ -64,7 +64,6 @@ function Mouse(_camera, scene)
 
     this.TouchMoveEvent = function (event) 
     {
-        console.log(event.touches);
         document.body.style.cursor = "grab";
         if(movingBoolean == true){
             document.body.style.cursor = "grabbing";
