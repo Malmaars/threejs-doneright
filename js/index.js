@@ -259,22 +259,31 @@ function StopMoving(){
 
 let fwButton = document.getElementById('forwardButton');
 fwButton.addEventListener('touchstart', MoveForward);
+fwButton.addEventListener('touchstart', haltPan);
 fwButton.addEventListener('touchend', StopMoving);
+fwButton.addEventListener('touchend', allowPan);
 
 let bckButton = document.getElementById('backButton');
 bckButton.addEventListener('touchstart', MoveBackward);
+bckButton.addEventListener('touchstart', haltPan);
 bckButton.addEventListener('touchend', StopMoving);
+bckButton.addEventListener('touchend', allowPan);
 
 var startphoneMoveLoc;
 var phoneMoveDir = 0;
 
 let leftButton = document.getElementById('leftButton');
 leftButton.addEventListener('touchstart', turnBoatLeft);
+leftButton.addEventListener('touchstart', haltPan);
 leftButton.addEventListener('touchend', stopRotation);
+leftButton.addEventListener('touchend', allowPan);
 
 let rightButton = document.getElementById('rightButton');
 rightButton.addEventListener('touchstart', turnBoatRight);
+rightButton.addEventListener('touchstart', haltPan);
 rightButton.addEventListener('touchend', stopRotation);
+rightButton.addEventListener('touchend', allowPan);
+
 
 
 function turnBoatLeft(){
@@ -287,6 +296,14 @@ function turnBoatRight(){
 
 function stopRotation(){
     rotOffset = 0;
+}
+
+function haltPan(){
+    mouse.panIsAllowed = false;
+}
+
+function allowPan(){
+    mouse.panIsAllowed = true;
 }
 //input to check wether the player lets go of certain keys to let them stop moving
 //I might have to change this to detect stopping movement better
