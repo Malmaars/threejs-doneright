@@ -373,6 +373,10 @@ const tick = () => {
     if(initialized == true){
         if(onMobile == true){
             mobile.Update();
+
+            if(panIsAllowed == false){
+                boat.ResetCamera();
+            }
         }
             // Update objects
         boat.Update(posOffset, rotOffset, delta);
