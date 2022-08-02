@@ -246,16 +246,24 @@ function onDocumentKeyDown(event) {
 function MoveForward(){
     posOffset = moveSpeed;
     boat.ResetCamera();
-    console.log("Moving forward");
+}
+
+function MoveBackward(){
+    posOffset = -moveSpeed;
+    boat.ResetCamera();
 }
 
 function StopMoving(){
     posOffset = 0;
 }
 
-let button = document.getElementById('forwardButton');
-button.addEventListener('touchstart', MoveForward);
-button.addEventListener('touchend', StopMoving);
+let fwButton = document.getElementById('forwardButton');
+fwButton.addEventListener('touchstart', MoveForward);
+fwButton.addEventListener('touchend', StopMoving);
+
+let bckButton = document.getElementById('backButton');
+bckButton.addEventListener('touchstart', MoveBackward);
+bckButton.addEventListener('touchend', StopMoving);
 
 //input to check wether the player lets go of certain keys to let them stop moving
 //I might have to change this to detect stopping movement better
