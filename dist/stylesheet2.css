@@ -97,6 +97,9 @@ left: calc(50% - 24px);
 width: 50px;
 height: 50px;
 background-image: url("resources/sprites/BackwardsNormal.png");
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
 background-size: cover;
 }
 
@@ -107,6 +110,9 @@ left: calc(50% - 24px);
 width: 50px;
 height: 50px;
 background-image: url("resources/sprites/ForwardNormal.png");
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
 background-size: cover;
 }
 
@@ -117,6 +123,9 @@ left: calc(50% - 44px);
 width: 80px;
 height: 80px;
 background-image: url("resources/sprites/TurnLeft.png");
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
 background-size: cover;
 }
 
@@ -127,5 +136,8 @@ image4{
   width: 80px;
   height: 80px;
   background-image: url("resources/sprites/TurnRight.png");
-background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
