@@ -89,3 +89,43 @@ h1 {
     will-change: opacity;
     opacity: 1;
 }
+
+image1{
+  position: absolute;
+top: calc(50% - 22px);
+left: calc(50% - 24px);
+width: 50px;
+height: 50px;
+background-image: url("resources/sprites/BackwardsNormal.png");
+background-size: cover;
+}
+
+image2{
+  position: absolute;
+top: calc(50% - 25px);
+left: calc(50% - 24px);
+width: 50px;
+height: 50px;
+background-image: url("resources/sprites/ForwardNormal.png");
+background-size: cover;
+}
+
+image3{
+  position: absolute;
+top: calc(50% - 40px);
+left: calc(50% - 44px);
+width: 80px;
+height: 80px;
+background-image: url("resources/sprites/TurnLeft.png");
+background-size: cover;
+}
+
+image4{
+  position: absolute;
+  top: calc(50% - 40px);
+  left: calc(50% - 38px);
+  width: 80px;
+  height: 80px;
+  background-image: url("resources/sprites/TurnRight.png");
+background-size: cover;
+}
