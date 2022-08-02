@@ -151,9 +151,13 @@ function Boat(scene, modelLoader, texLoader, engine) {
 
         if(currentlyPressedKey == 87 || currentlyPressedKey == 65 || currentlyPressedKey == 83 || currentlyPressedKey == 68
             || currentlyPressedKey == 38 || currentlyPressedKey == 40 || currentlyPressedKey == 39 || currentlyPressedKey == 37){
-            cameraMoveBooleandown = false;
-            cameraMoveBooleanmove = false;
+                this.ResetCamera();
         }
+    }
+
+    this.ResetCamera = function(){
+        cameraMoveBooleandown = false;
+        cameraMoveBooleanmove = false;
     }
 
     var Clouds = [];
