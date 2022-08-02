@@ -8,7 +8,7 @@ function Sea(scene, textureLoader, path, height, opacity) {
     map.repeat.set(100, 100);
 
     //the sea itself. It's just a plane like cube
-    const seaGeometry = new THREE.BoxGeometry(2000, 1, 2000);
+    const seaGeometry = new THREE.BoxGeometry(5000, 1, 5000);
 
     //the material of the sea. FOr now I have the reflection set very low, I might want to edit this later
     const material = new THREE.MeshStandardMaterial();

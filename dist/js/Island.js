@@ -5,7 +5,7 @@
 function Island(_camera ,scene, fontLoader, modelLoader, texLoader, engine, boatReference, mouseRef, location, billboardTexture, title, descriptions, link)
 {
     const billboard = new Billboard(scene, modelLoader, texLoader, billboardTexture, new THREE.Vector3(location.x, location.y + 1.65, location.z + 4));
-    const platform = new Platform(_camera ,scene, modelLoader, texLoader, new THREE.Vector3(location.x, location.y + 0.9, location.z - 8), boatReference, mouseRef, link);
+    const platform = new Platform(_camera ,scene, modelLoader, texLoader, fontLoader, new THREE.Vector3(location.x, location.y + 0.9, location.z - 8), boatReference, mouseRef, link);
     const tree = [
         new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x + 6.5, location.y + 1.65, location.z - 0)),
         new Tree(scene, modelLoader, texLoader, new THREE.Vector3(location.x - 7, location.y + 1.65, location.z - 1)),

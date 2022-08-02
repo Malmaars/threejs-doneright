@@ -143,7 +143,9 @@ function Boat(scene, modelLoader, texLoader, engine) {
     //I'll have to change this when the player is close to an island to see info better.
     this.UpdateCameraPos = function (camera, currentlyPressedKey) {
         if (this.model && (!cameraMoveBooleandown && !cameraMoveBooleanmove)) {
-            camera.position.lerp(new THREE.Vector3(this.collider.position.x, this.collider.position.y + 10, this.collider.position.z - 10), 0.1);
+            //let offsetCamera = 6000/window.innerWidth;
+            let offsetCamera = 0;
+            camera.position.lerp(new THREE.Vector3(this.collider.position.x, this.collider.position.y + 10 + offsetCamera, this.collider.position.z - 10 - offsetCamera), 0.1);
             // camera.position.x = this.collider.position.x;
             // camera.position.y = this.collider.position.y + 10;
             // camera.position.z = this.collider.position.z - 10;
@@ -164,8 +166,10 @@ function Boat(scene, modelLoader, texLoader, engine) {
     this.Initialize = function(camera){
         //this.GenerateCloud();
         this.model.position.set(-0.08,-0.5,0);
-        this.collider.rotateY(Math.PI/2);   
+        //this.collider.rotateY(Math.PI/2);   
         this.collider.position.set(0,0.6,0);
+
+        Matter.Body.rotate(boatBox, Math.PI/2);
 
         camera.position.set(this.collider.position.x, this.collider.position.y + 10, this.collider.position.z - 10);
     }
