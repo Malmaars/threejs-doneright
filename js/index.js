@@ -374,7 +374,7 @@ const tick = () => {
         if(onMobile == true){
             mobile.Update();
 
-            if(panIsAllowed == false){
+            if(mouse.panIsAllowed == false){
                 boat.ResetCamera();
             }
         }
