@@ -154,11 +154,35 @@ function UpdateCameraPos()
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    alpha: false
+    alpha: false,
+    antialias: true
 })
+
 renderer.setSize(sizes.width, sizes.height)
 //if I set this low I can emulate an old pc effect
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+
+// var renderPass = new THREE.RenderPass( scene, camera );
+
+// var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+// copyPass.renderToScreen = true;
+
+// var composer = new THREE.EffectComposer( renderer );
+// composer.addPass( renderPass );
+// composer.addPass( copyPass );
+
+// var fxaaPass = new THREE.ShaderPass( THREE.FXAAShader );
+// const size = new THREE.Vector2();
+// const pixelRatio = renderer.getPixelRatio();
+
+// size.x = renderer.domElement.clientWidth * pixelRatio;
+// size.y = renderer.domElement.clientHeight * pixelRatio;
+// var uniforms = fxaaPass.material.uniforms;
+// uniforms[ 'resolution' ].value.x = 1 / size.x;
+// uniforms[ 'resolution' ].value.y = 1 / size.y;
+
+// composer.addPass( fxaaPass );
 
 const mouse = new Mouse(camera, scene);
 
@@ -233,6 +257,20 @@ const permaDecos = [
     new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/J.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-6,-0.1,-5), false, new THREE.Vector3(0.7,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
     new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/N.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-7,-0.1,-5), false, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
     new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Letters/E.fbx', 'resources/textures/Fullwhite.png', new THREE.Vector3(-8,-0.1,-5), false, new THREE.Vector3(0.5,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(5,-0.1,5), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(10,-0.1,4), true, new THREE.Vector3(4,2,4), new THREE.Vector3(0,0,0), 0,Math.PI *1.5, 4),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(-10,-0.1,6), true, new THREE.Vector3(4,2,4), new THREE.Vector3(0,0,0), Math.PI/2,Math.PI *1.5, 4),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(-16,-0.1,3.5), true, new THREE.Vector3(5,2,5), new THREE.Vector3(0,0,0), Math.PI * 1.3,Math.PI *1.5, 5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(14,-0.1,-3), true, new THREE.Vector3(5,2,5), new THREE.Vector3(0,0,0), Math.PI * 1.3,Math.PI *1.5, 5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(-20,-0.1,-3), true, new THREE.Vector3(5,2,5), new THREE.Vector3(0,0,0), Math.PI * 0.4,Math.PI *1.5, 5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/RockSimpleV2.fbx', 'resources/textures/RockTexture.png', new THREE.Vector3(-2,-0.1,10), true, new THREE.Vector3(6,2,6), new THREE.Vector3(0,0,0),0,Math.PI *1.5, 6),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/LifeBuoy.fbx', 'resources/textures/LifeBuoy.png', new THREE.Vector3(-1.5,-0.1,-19.2), false, new THREE.Vector3(0.2,2,0.2), new THREE.Vector3(0,0,0),0,0, 0.2),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/BasicIsland.fbx', 'resources/textures/BasicIslandTextures/lambert1_Base_color.png', new THREE.Vector3(30,-1,-19.2), true, new THREE.Vector3(6.5,2,6.5), new THREE.Vector3(0,0,0),0,0, 0.5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Windmill.fbx', 'resources/textures/Windmill.png', new THREE.Vector3(30,0.6,-18), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0),0,0, 0.5),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/Pointer.fbx', 'resources/textures/Pointer.png', new THREE.Vector3(28,0.6,-20), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,0,1),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/SyrupWaffle.fbx', 'resources/textures/SyrupWaffle.png', new THREE.Vector3(32,0.7,-20), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), 0,0,0.6),
+    new Decoratives(scene, modelLoader, texLoader, engine, 'resources/models/SyrupWaffle.fbx', 'resources/textures/SyrupWaffle.png', new THREE.Vector3(31,0.8,-20), true, new THREE.Vector3(1,2,1), new THREE.Vector3(0,0,0), Math.PI * 0.4,Math.PI * 1.05,0.6)
+
 
 ]
 
@@ -463,11 +501,14 @@ const tick = () => {
         }
     }
 
+    Uppersea.model.position.set(camera.position.x, Uppersea.model.position.y, camera.position.z );
+    Lowersea.model.position.set(camera.position.x, Lowersea.model.position.y, camera.position.z );
+
     // Update Orbital Controls
     // controls.update()
 
     // Render
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
     // Call tick again on the next frame
     window.requestAnimationFrame(tick);
 }

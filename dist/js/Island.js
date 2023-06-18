@@ -80,7 +80,10 @@ function Island(_camera ,scene, fontLoader, modelLoader, texLoader, engine, boat
             material.metalness = 0;
             textMesh1 = new THREE.Mesh( geometry, material);
             textMesh1.scale.set(0.004,0.004,0.004);
-            textMesh1.position.set(location.x + 1.5, location.y + 2, location.z + 1.5);
+
+            var charArray = Array.from(title);
+            console.log(charArray);
+            textMesh1.position.set(location.x + charArray.length / 6, location.y + 2, location.z + 1.5);
             textMesh1.rotation.x = Math.PI * 0.4;
             textMesh1.rotation.y = Math.PI * 1;
             scene.add(textMesh1);

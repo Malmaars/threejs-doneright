@@ -5,7 +5,7 @@ function Sea(scene, textureLoader, path, height, opacity) {
     //repeat the texture, so it's not a giant texture that's very pixelized
     map.wrapS = THREE.RepeatWrapping;
     map.wrapT = THREE.RepeatWrapping;
-    map.repeat.set(100, 100);
+    map.repeat.set(40, 40);
 
     //the sea itself. It's just a plane like cube
     const seaGeometry = new THREE.BoxGeometry(5000, 1, 5000);
